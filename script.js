@@ -7,8 +7,9 @@ const projectsData = [
         title: "Eco-Red",
         student: "Aaron Cancino y Cristóbal Soto",
         specialty: "Programación",
-        techs: ["Innovación tecnológica", "Programación", "Eco-Red"],
+        techs: ["Innovación tecnológica", "Programación", "Eco-Red", "Sostenibilidad"],
         image: "aaron_tristobal.jpg",
+        year: "2025",
         description: "Proyecto tecnológico ganador del concurso Pensando las Tecnologías del Futuro, desarrollado por estudiantes de Programación del Liceo Bicentenario Manuel Montt."
     },
     {
@@ -18,6 +19,7 @@ const projectsData = [
         specialty: "Agropecuaria",
         techs: ["Drones", "DJI Agras", "Monitoreo", "Agricultura Tecnificada"],
         image: "drones-educacion.jpg",
+        year: "2025",
         description: "Experiencias reales con drones agrícolas en liceos en convenio: servicio técnico, reparación, charla multiespectral y vuelo del DJI Agras T100. Integración a la malla para monitorear, mapear y tratar cultivos, formando competencias laborales en el agro."
     }
 ];
@@ -29,12 +31,15 @@ document.addEventListener("DOMContentLoaded", () => {
     initNavbar();
     initThemeToggle();
     initCounters();
-    renderProjects(projectsData);
     initSearch();
     initComments();
     initModals();
     initScrollTop();
     initChatbot();
+    initFadeInAnimations();
+    // Skeleton breve + render de proyectos
+    showProjectSkeletons();
+    setTimeout(() => renderProjects(projectsData), 450);
 });
 
 /* 1. NAVBAR */
@@ -43,10 +48,16 @@ function initNavbar() {
     const navMenu = document.getElementById("nav-menu");
 
     if (hamburger && navMenu) {
-        hamburger.addEventListener("click", () => navMenu.classList.toggle("active"));
+        hamburger.addEventListener("click", () => {
+            const isOpen = navMenu.classList.toggle("active");
+            hamburger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
     }
     document.querySelectorAll(".nav-link").forEach(link => {
-        link.addEventListener("click", () => navMenu?.classList.remove("active"));
+        link.addEventListener("click", () => {
+            navMenu?.classList.remove("active");
+            hamburger?.setAttribute("aria-expanded", "false");
+        });
     });
 }
 
@@ -56,10 +67,23 @@ function initThemeToggle() {
     const html = document.documentElement;
     if (!toggleBtn) return;
 
+    // Restaurar preferencia guardada
+    const saved = localStorage.getItem("lm_theme");
+    if (saved === "light" || saved === "dark") {
+        html.setAttribute("data-theme", saved);
+        toggleBtn.innerHTML = saved === "light"
+            ? '<i class="fa-solid fa-sun"></i>'
+            : '<i class="fa-solid fa-moon"></i>';
+    }
+
     toggleBtn.addEventListener("click", () => {
         const isDark = html.getAttribute("data-theme") === "dark";
-        html.setAttribute("data-theme", isDark ? "light" : "dark");
-        toggleBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        const next = isDark ? "light" : "dark";
+        html.setAttribute("data-theme", next);
+        localStorage.setItem("lm_theme", next);
+        toggleBtn.innerHTML = isDark
+            ? '<i class="fa-solid fa-sun"></i>'
+            : '<i class="fa-solid fa-moon"></i>';
     });
 }
 
@@ -96,6 +120,25 @@ function initCounters() {
 }
 
 /* 4. PROYECTOS Y BUSCADOR */
+function showProjectSkeletons() {
+    const grid = document.getElementById("projects-grid");
+    if (!grid) return;
+    grid.innerHTML = "";
+    for (let i = 0; i < 2; i++) {
+        const sk = document.createElement("div");
+        sk.className = "skeleton-card";
+        sk.setAttribute("aria-hidden", "true");
+        sk.innerHTML = `
+            <div class="skeleton-img"></div>
+            <div class="skeleton-line medium"></div>
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line medium"></div>
+        `;
+        grid.appendChild(sk);
+    }
+}
+
 function renderProjects(projects) {
     const grid = document.getElementById("projects-grid");
     if (!grid) return;
@@ -106,24 +149,31 @@ function renderProjects(projects) {
         return;
     }
 
-    projects.forEach(p => {
+    projects.forEach((p, idx) => {
         const card = document.createElement("div");
-        card.className = "project-card";
+        card.className = "project-card fade-in";
+        card.style.setProperty("--i", idx);
         card.innerHTML = `
             <div class="project-img-wrapper">
-                <img src="${p.image}" alt="${p.title}">
+                <img src="${p.image}" alt="Proyecto ${p.title} - ${p.specialty}" loading="lazy">
                 <span class="project-badge">${p.specialty}</span>
             </div>
             <div class="project-info">
                 <h3>${p.title}</h3>
-                <p class="project-author"><i class="fa-solid fa-user"></i> ${p.student}</p>
+                <p class="project-author"><i class="fa-solid fa-user" aria-hidden="true"></i> ${p.student}</p>
                 <p class="project-desc">${p.description}</p>
-                <button class="btn-secondary view-project-btn" style="width:100%; margin-top:0.8rem;" data-id="${p.id}">
+                ${p.year ? `<p class="project-year"><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${p.year}</p>` : ""}
+                <button class="btn-secondary view-project-btn" style="width:100%; margin-top:0.8rem;" data-id="${p.id}" aria-label="Ver detalles del proyecto ${p.title}">
                     Ver detalles
                 </button>
             </div>
         `;
         grid.appendChild(card);
+    });
+
+    // Activar fade-in inmediatamente después de insertar
+    requestAnimationFrame(() => {
+        grid.querySelectorAll(".fade-in").forEach(el => el.classList.add("visible"));
     });
 
     document.querySelectorAll(".view-project-btn").forEach(btn => {
@@ -228,9 +278,50 @@ function initModals() {
     const closeBtn = document.getElementById("modal-close");
     const overlay = document.getElementById("modal-overlay");
 
-    const closeModal = () => modal?.classList.remove("active");
+    const closeModal = () => {
+        if (!modal) return;
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+    };
     if (closeBtn) closeBtn.onclick = closeModal;
     if (overlay) overlay.onclick = closeModal;
+
+    // Cerrar con Escape
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal?.classList.contains("active")) {
+            closeModal();
+        }
+    });
+
+    // Activar lectura completa de especialidades
+    document.querySelectorAll(".btn-read-more").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const card = e.target.closest(".specialty-card");
+            if (!card) return;
+
+            const titleEl = card.querySelector("h3");
+            const textEl = card.querySelector("p");
+            const tagsEl = card.querySelector(".tags");
+
+            if (!titleEl || !textEl) return;
+
+            const title = titleEl.innerText;
+            const fullText = textEl.innerText;
+            const tags = tagsEl ? tagsEl.innerHTML : "";
+
+            const modalBody = document.getElementById("modal-body");
+            if (!modalBody || !modal) return;
+
+            modalBody.innerHTML = `
+                <h2 style="margin-bottom: 1rem; color: var(--color-primary-blue);" id="modal-title">${title}</h2>
+                <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-main); margin-bottom: 1.5rem;">${fullText}</p>
+                <div class="tags">${tags}</div>
+            `;
+            modal.classList.add("active");
+            modal.setAttribute("aria-hidden", "false");
+            closeBtn?.focus();
+        });
+    });
 }
 
 function openProjectModal(id) {
@@ -240,15 +331,20 @@ function openProjectModal(id) {
     const modalBody = document.getElementById("modal-body");
     const modal = document.getElementById("project-modal");
 
+    if (!modalBody || !modal) return;
+
     modalBody.innerHTML = `
-        <img src="${p.image}" style="width:100%; border-radius:8px; height:180px; object-fit:cover; margin-bottom:1rem;">
+        <img src="${p.image}" alt="Imagen del proyecto ${p.title}" style="width:100%; border-radius:8px; height:180px; object-fit:cover; margin-bottom:1rem;">
         <span class="badge">${p.specialty}</span>
-        <h2 style="margin: 0.5rem 0;">${p.title}</h2>
-        <p style="color: var(--color-primary-blue); font-weight: 600;"><i class="fa-solid fa-user"></i> Autor: ${p.student}</p>
+        <h2 style="margin: 0.5rem 0;" id="modal-title">${p.title}</h2>
+        <p style="color: var(--color-primary-blue); font-weight: 600;"><i class="fa-solid fa-user" aria-hidden="true"></i> Autor: ${p.student}</p>
+        ${p.year ? `<p style="color: var(--text-muted); font-size:0.85rem;"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Año: ${p.year}</p>` : ""}
         <p style="color: var(--text-muted); margin: 0.8rem 0;">${p.description}</p>
         <div class="tags">${p.techs.map(t => `<span>${t}</span>`).join('')}</div>
     `;
     modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.getElementById("modal-close")?.focus();
 }
 
 function initScrollTop() {
@@ -274,12 +370,21 @@ function initChatbot() {
     if (!chatToggle || !chatWindow) return;
 
     chatToggle.onclick = () => {
-        chatWindow.classList.toggle("active");
-        if (chatWindow.classList.contains("active")) {
+        const isOpen = chatWindow.classList.toggle("active");
+        chatToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        chatWindow.setAttribute("aria-hidden", isOpen ? "false" : "true");
+        if (isOpen) {
             document.getElementById("chat-input")?.focus();
         }
     };
-    if (chatClose) chatClose.onclick = () => chatWindow.classList.remove("active");
+    if (chatClose) {
+        chatClose.onclick = () => {
+            chatWindow.classList.remove("active");
+            chatToggle.setAttribute("aria-expanded", "false");
+            chatWindow.setAttribute("aria-hidden", "true");
+            chatToggle.focus();
+        };
+    }
 
     if (chatForm) {
         chatForm.addEventListener("submit", (e) => {
@@ -350,4 +455,30 @@ function formatMessageText(text) {
     return text
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         .replace(/\n/g, "<br>");
+}
+/* ==========================================================================
+   8. ANIMACIONES FADE-IN (Intersection Observer)
+   ========================================================================== */
+function initFadeInAnimations() {
+    const elements = document.querySelectorAll(
+        ".stat-card, .specialty-card, .contact-card, .credits-box, .section-header, .search-box"
+    );
+    elements.forEach((el, i) => {
+        el.classList.add("fade-in");
+        el.style.setProperty("--i", i % 8);
+    });
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    elements.forEach((el) => observer.observe(el));
 }
