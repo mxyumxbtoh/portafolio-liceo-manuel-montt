@@ -1,3 +1,22 @@
+* ==========================================================================
+   PORTAFOLIO VIRTUAL - Liceo Bicentenario Manuel Montt
+   script.js
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CONFIG IA (Gemini gratis)
+   1) Entra a https://aistudio.google.com/apikey
+   2) Crea una API key
+   3) Pégala entre las comillas de abajo
+   -------------------------------------------------------------------------- */
+const GEMINI_API_KEY = "AIzaSyAQ.Ab8RN6KlhFXIThs0UxsXQaR6BtX-LDxpRPcLnt8jK8wiFBGTag"; // <-- PEGA TU API KEY AQUÍ
+
+const JARVIE_SYSTEM = `Eres JARVIE, asistente virtual del Portafolio del Liceo Bicentenario Manuel Montt (San Javier, Chile).
+Responde en español de Chile, claro, amable y breve (máximo 2-3 párrafos cortos).
+Especialidades del liceo: Programación, Electricidad, Contabilidad, Administración (RRHH), Construcciones Metálicas, Atención de Párvulos, Agropecuaria y Gastronomía (Cocina).
+Puedes hablar de especialidades, campo laboral, continuidad de estudios, proyectos de estudiantes y navegación del sitio.
+Si no sabes un dato interno del liceo, dilo y orienta a la sección Contacto o Especialidades.`;
+
 /* ==========================================================================
    DATOS DE PROYECTOS
    ========================================================================== */
@@ -24,7 +43,6 @@ const projectsData = [
     }
 ];
 
-// Variable global para rastrear el elemento que abrió un modal (Accesibilidad Focus)
 let lastFocusedElement = null;
 
 /* ==========================================================================
@@ -42,12 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
     initFadeInAnimations();
     initProjectGridEvents();
 
-    // Skeleton breve + render de proyectos
     showProjectSkeletons();
     setTimeout(() => renderProjects(projectsData), 450);
 });
 
-/* 1. NAVBAR */
+/* ==========================================================================
+   1. NAVBAR
+   ========================================================================== */
 function initNavbar() {
     const hamburger = document.getElementById("hamburger");
     const navMenu = document.getElementById("nav-menu");
@@ -58,6 +77,7 @@ function initNavbar() {
             hamburger.setAttribute("aria-expanded", isOpen ? "true" : "false");
         });
     }
+
     document.querySelectorAll(".nav-link").forEach(link => {
         link.addEventListener("click", () => {
             navMenu?.classList.remove("open");
@@ -66,7 +86,9 @@ function initNavbar() {
     });
 }
 
-/* 2. TEMA */
+/* ==========================================================================
+   2. TEMA CLARO / OSCURO
+   ========================================================================== */
 function initThemeToggle() {
     const toggleBtn = document.getElementById("theme-toggle");
     const html = document.documentElement;
@@ -91,7 +113,9 @@ function initThemeToggle() {
     });
 }
 
-/* 3. CONTADORES (Optimizado con IntersectionObserver) */
+/* ==========================================================================
+   3. CONTADORES
+   ========================================================================== */
 function initCountersObserver() {
     const section = document.getElementById("estadisticas");
     if (!section) return;
@@ -109,10 +133,9 @@ function initCountersObserver() {
 }
 
 function startCounters() {
-    const counters = document.querySelectorAll(".stat-number");
-    counters.forEach(counter => {
+    document.querySelectorAll(".stat-number").forEach(counter => {
         const target = +counter.getAttribute("data-target");
-        if (target === 0) return;
+        if (!target) return;
         let count = 0;
         const step = Math.ceil(target / 50) || 1;
         const timer = setInterval(() => {
@@ -127,7 +150,9 @@ function startCounters() {
     });
 }
 
-/* 4. PROYECTOS Y BUSCADOR */
+/* ==========================================================================
+   4. PROYECTOS Y BUSCADOR
+   ========================================================================== */
 function showProjectSkeletons() {
     const grid = document.getElementById("projects-grid");
     if (!grid) return;
@@ -152,7 +177,7 @@ function renderProjects(projects) {
     if (!grid) return;
     grid.innerHTML = "";
 
-    if (projects.length === 0) {
+    if (!projects.length) {
         grid.innerHTML = `<p class="no-projects-msg">No se encontraron proyectos.</p>`;
         return;
     }
@@ -182,24 +207,20 @@ function renderProjects(projects) {
     });
 
     grid.appendChild(fragment);
-
     requestAnimationFrame(() => {
         grid.querySelectorAll(".fade-in").forEach(el => el.classList.add("visible"));
     });
 }
 
-// Delegación de eventos para los botones del grid de proyectos
 function initProjectGridEvents() {
     const grid = document.getElementById("projects-grid");
     if (!grid) return;
 
     grid.addEventListener("click", (e) => {
         const btn = e.target.closest(".view-project-btn");
-        if (btn) {
-            lastFocusedElement = btn;
-            const id = parseInt(btn.getAttribute("data-id"), 10);
-            openProjectModal(id);
-        }
+        if (!btn) return;
+        lastFocusedElement = btn;
+        openProjectModal(parseInt(btn.getAttribute("data-id"), 10));
     });
 }
 
@@ -231,21 +252,23 @@ function initSearch() {
     }
 }
 
-/* 5. COMENTARIOS */
+/* ==========================================================================
+   5. COMENTARIOS
+   ========================================================================== */
 function initComments() {
     const form = document.getElementById("comment-form");
     const list = document.getElementById("comments-list");
     const count = document.getElementById("comment-count");
     if (!form || !list) return;
 
-    const getComments = () => JSON.parse(localStorage.getItem("lm_comments")) || [];
+    const getComments = () => JSON.parse(localStorage.getItem("lm_comments") || "[]");
 
     const render = () => {
         const comments = getComments();
         list.innerHTML = "";
         if (count) count.innerText = comments.length;
 
-        if (comments.length === 0) {
+        if (!comments.length) {
             list.innerHTML = `<p class="no-comments-msg">Sin comentarios aún. Sé el primero.</p>`;
             return;
         }
@@ -270,26 +293,22 @@ function initComments() {
         e.preventDefault();
         const authorInput = document.getElementById("comment-author");
         const bodyInput = document.getElementById("comment-body");
-
         const author = authorInput.value.trim();
         const body = bodyInput.value.trim();
+        if (!author || !body) return;
 
-        if (author && body) {
-            const comments = getComments();
-            comments.unshift({
-                author,
-                body,
-                date: new Date().toLocaleDateString("es-CL", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric"
-                })
-            });
-            localStorage.setItem("lm_comments", JSON.stringify(comments));
-            authorInput.value = "";
-            bodyInput.value = "";
-            render();
-        }
+        const comments = getComments();
+        comments.unshift({
+            author,
+            body,
+            date: new Date().toLocaleDateString("es-CL", {
+                day: "numeric", month: "short", year: "numeric"
+            })
+        });
+        localStorage.setItem("lm_comments", JSON.stringify(comments));
+        authorInput.value = "";
+        bodyInput.value = "";
+        render();
     });
 
     render();
@@ -298,11 +317,13 @@ function initComments() {
 function escapeHTML(str) {
     if (typeof str !== "string") return "";
     return str.replace(/[&<>'"]/g, tag => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
     }[tag] || tag));
 }
 
-/* 6. MODALES Y SCROLL */
+/* ==========================================================================
+   6. MODALES Y SCROLL TOP
+   ========================================================================== */
 function initModals() {
     const modal = document.getElementById("project-modal");
     const closeBtn = document.getElementById("modal-close");
@@ -312,18 +333,42 @@ function initModals() {
         if (!modal) return;
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
-        if (lastFocusedElement) {
-            lastFocusedElement.focus();
-        }
+        if (lastFocusedElement) lastFocusedElement.focus();
     };
 
     if (closeBtn) closeBtn.onclick = closeModal;
     if (overlay) overlay.onclick = closeModal;
 
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal?.classList.contains("active")) {
-            closeModal();
-        }
+        if (e.key === "Escape" && modal?.classList.contains("active")) closeModal();
+    });
+
+    // Solo botones (no <a href="..."> de especialidades)
+    document.querySelectorAll(".btn-read-more").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            if (btn.tagName === "A" && btn.getAttribute("href") && btn.getAttribute("href") !== "#") {
+                return;
+            }
+            e.preventDefault();
+            const card = e.target.closest(".specialty-card");
+            if (!card) return;
+            const titleEl = card.querySelector("h3");
+            const textEl = card.querySelector("p");
+            const tagsEl = card.querySelector(".tags");
+            if (!titleEl || !textEl) return;
+
+            const modalBody = document.getElementById("modal-body");
+            if (!modalBody || !modal) return;
+
+            modalBody.innerHTML = `
+                <h2 class="modal-title" id="modal-title">${escapeHTML(titleEl.innerText)}</h2>
+                <p class="modal-text">${escapeHTML(textEl.innerText)}</p>
+                <div class="tags">${tagsEl ? tagsEl.innerHTML : ""}</div>
+            `;
+            modal.classList.add("active");
+            modal.setAttribute("aria-hidden", "false");
+            closeBtn?.focus();
+        });
     });
 }
 
@@ -333,7 +378,6 @@ function openProjectModal(id) {
 
     const modalBody = document.getElementById("modal-body");
     const modal = document.getElementById("project-modal");
-
     if (!modalBody || !modal) return;
 
     modalBody.innerHTML = `
@@ -343,7 +387,7 @@ function openProjectModal(id) {
         <p class="modal-author">Autor: ${escapeHTML(p.student)}</p>
         ${p.year ? `<p class="modal-year">Año: ${escapeHTML(p.year)}</p>` : ""}
         <p class="modal-text">${escapeHTML(p.description)}</p>
-        <div class="tags">${p.techs.map(t => `<span>${escapeHTML(t)}</span>`).join('')}</div>
+        <div class="tags">${p.techs.map(t => `<span>${escapeHTML(t)}</span>`).join("")}</div>
     `;
     modal.classList.add("active");
     modal.setAttribute("aria-hidden", "false");
@@ -355,15 +399,14 @@ function initScrollTop() {
     if (!btn) return;
 
     window.addEventListener("scroll", () => {
-        if (window.scrollY > 300) btn.classList.add("visible");
-        else btn.classList.remove("visible");
+        btn.classList.toggle("visible", window.scrollY > 300);
     }, { passive: true });
 
     btn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 /* ==========================================================================
-   7. CHATBOT ASÍNCRONO - JARVIE
+   7. CHATBOT JARVIE — IA (Gemini) + respaldo local
    ========================================================================== */
 function initChatbot() {
     const chatToggle = document.getElementById("chat-toggle");
@@ -377,9 +420,7 @@ function initChatbot() {
         const isOpen = chatWindow.classList.toggle("active");
         chatToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
         chatWindow.setAttribute("aria-hidden", isOpen ? "false" : "true");
-        if (isOpen) {
-            document.getElementById("chat-input")?.focus();
-        }
+        if (isOpen) document.getElementById("chat-input")?.focus();
     };
 
     if (chatClose) {
@@ -398,68 +439,88 @@ function initChatbot() {
         });
     }
 
-    // Mensaje de bienvenida JARVIE
     if (chatMessages) {
         chatMessages.innerHTML = "";
-        appendMessage("¡Hola! 👋 Soy **JARVIE**, asistente de soporte virtual. ¿Qué te gustaría saber hoy?", "bot");
+        appendMessage("¡Hola! 👋 Soy **JARVIE**, asistente del Liceo Manuel Montt. Pregúntame por especialidades, proyectos o lo que necesites.", "bot");
     }
 }
 
-function getJarvieReply(text) {
-    const q = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+function normalizeText(text) {
+    return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 
-    if (/^(hola|ola|buenas|hey|hi|hello|que tal|que onda)\b/.test(q) || (q.length < 4 && /hola|ola|hi/.test(q))) {
-        return "¡Hola! 👋 Soy **JARVIE**, asistente del Portafolio Virtual del Liceo Bicentenario Manuel Montt (San Javier). Puedo contarte sobre las **especialidades**, proyectos, contacto o cómo navegar el sitio. ¿Qué necesitas?";
+function getJarvieReplyLocal(text) {
+    const q = normalizeText(text);
+
+    if (/^(hola|ola|buenas|hey|hi|hello|oye|que tal|que onda)\b/.test(q) || (q.length < 5 && /hola|ola|hi|oye/.test(q))) {
+        return "¡Hola! 👋 Soy **JARVIE**. Puedo hablar de las **especialidades**, proyectos, contacto o casi cualquier tema si la IA está activa. ¿Qué necesitas?";
     }
-    if (/especialidad|especialidades|que enseñan|que carreras|que oficios|que tecnicos/.test(q)) {
-        return "El liceo ofrece **8 especialidades** técnico-profesionales:\n\n1. **Programación**\n2. **Electricidad**\n3. **Contabilidad**\n4. **Administración (RRHH)**\n5. **Construcciones Metálicas**\n6. **Atención de Párvulos**\n7. **Agropecuaria**\n8. **Gastronomía (Cocina)**\n\nEscribe el nombre de una para ver más detalles, o ve a la sección **Especialidades** y pulsa *Ver más*.";
+    if (/especialidad|especialidades|que enseñan|que carreras|oficios|tecnicos/.test(q)) {
+        return "El liceo tiene **8 especialidades**:\n\n1. Programación\n2. Electricidad\n3. Contabilidad\n4. Administración (RRHH)\n5. Construcciones Metálicas\n6. Atención de Párvulos\n7. Agropecuaria\n8. Gastronomía (Cocina)\n\nEscribe el nombre de una o ve a **Especialidades** → *Ver más*.";
     }
-    if (/programac|software|codigo|web|python|javascript|informatica/.test(q)) {
-        return "**Programación**: forma técnicos en desarrollo de software, páginas web, bases de datos, soporte y automatización (Arduino). Alta demanda laboral.\n\n👉 Más info: página **Programación** (botón Ver más).";
+    if (/programac|software|codigo|python|javascript|informatica/.test(q)) {
+        return "**Programación**: software, web, bases de datos, soporte y automatización. 👉 Página **Programación**.";
     }
     if (/electric|instalacion|tablero|fotovolta|plc/.test(q)) {
-        return "**Electricidad**: instalaciones residenciales/comerciales, mantenimiento industrial, tableros, automatización y energías renovables.\n\n👉 Página: **Electricidad**.";
+        return "**Electricidad**: instalaciones, mantenimiento, tableros, automatización y renovables. 👉 Página **Electricidad**.";
     }
     if (/contabil|tributar|impuesto|erp|balance|finanza/.test(q)) {
-        return "**Contabilidad**: registro contable, tributaria, remuneraciones, ERP y finanzas.\n\n👉 Página: **Contabilidad**.";
+        return "**Contabilidad**: registro contable, tributaria, remuneraciones y ERP. 👉 Página **Contabilidad**.";
     }
-    if (/administr|rrhh|recursos humanos|remuneracion|contrato|finiquito|reclut/.test(q)) {
-        return "**Administración (RRHH)**: contratos, liquidaciones, finiquitos, reclutamiento y legislación laboral.\n\n👉 Página: **Administración**.";
+    if (/administr|rrhh|recursos humanos|contrato|finiquito|reclut/.test(q)) {
+        return "**Administración (RRHH)**: contratos, liquidaciones, reclutamiento y legislación laboral. 👉 Página **Administración**.";
     }
-    if (/metal|soldadur|mig|tig|estructura metal|cerrajer/.test(q)) {
-        return "**Construcciones Metálicas**: soldadura (MIG/TIG/MAG), planos CAD, montaje estructural y metalmecánica.\n\n👉 Página: **Construcciones Metálicas**.";
+    if (/metal|soldadur|mig|tig|cerrajer/.test(q)) {
+        return "**Construcciones Metálicas**: soldadura MIG/TIG/MAG, planos CAD y montaje. 👉 Página **Construcciones Metálicas**.";
     }
-    if (/parvulo|jardin|infantil|ninos|ninas|estimulacion|sala cuna/.test(q)) {
-        return "**Atención de Párvulos**: cuidado y estimulación de niños/as de 0 a 6 años, material didáctico y trabajo con familias.\n\n👉 Página: **Atención de Párvulos**.";
+    if (/parvulo|jardin|infantil|estimulacion|sala cuna/.test(q)) {
+        return "**Atención de Párvulos**: cuidado y estimulación 0-6 años. 👉 Página **Atención de Párvulos**.";
     }
-    if (/agro|agricol|ganad|riego|cultivo|campo|pecuaria/.test(q)) {
-        return "**Agropecuaria**: producción agrícola, manejo pecuario, maquinaria, riego y suelos.\n\n👉 Página: **Agropecuaria**.";
+    if (/agro|agricol|ganad|riego|cultivo|pecuaria/.test(q)) {
+        return "**Agropecuaria**: producción agrícola, pecuaria, maquinaria y riego. 👉 Página **Agropecuaria**.";
     }
-    if (/gastro|cocina|chef|culinari|banquete|restaurant|comida|alimento/.test(q)) {
-        return "**Gastronomía (Cocina)**: técnicas culinarias, inocuidad (BPM), cocina nacional e internacional y banquetería.\n\n👉 Página: **Gastronomía**.";
+    if (/gastro|cocina|chef|culinari|banquete|restaurant/.test(q)) {
+        return "**Gastronomía**: técnicas culinarias, inocuidad, cocina internacional y banquetería. 👉 Página **Gastronomía**.";
     }
-    if (/contacto|correo|email|telefono|donde|ubicacion|direccion|san javier/.test(q)) {
-        return "📍 **Liceo Bicentenario Manuel Montt** — San Javier.\n\nRevisa la sección **Contacto** del menú para web oficial, correo y teléfono.";
+    if (/contacto|correo|telefono|ubicacion|san javier/.test(q)) {
+        return "📍 **Liceo Bicentenario Manuel Montt** — San Javier. Revisa la sección **Contacto**.";
     }
-    if (/proyecto|portafolio|trabajos de alumnos|ver proyecto/.test(q)) {
-        return "En **Proyectos** verás trabajos reales de estudiantes. Usa el buscador o el botón *Ver proyectos*.";
+    if (/proyecto|portafolio/.test(q)) {
+        return "En **Proyectos** verás trabajos reales de estudiantes. Usa el buscador o *Ver proyectos*.";
     }
-    if (/sueldo|salario|plata|gana|empleo|trabajo|campo laboral/.test(q)) {
-        return "Cada especialidad tiene su campo laboral y rangos de ingreso. Entra a la página de la especialidad (botón **Ver más**) y revisa *Campo laboral* y *Sueldos*.";
+    if (/gracias|chao|adios|bye/.test(q)) {
+        return "¡De nada! Aquí estaré si necesitas algo más. 😊";
     }
-    if (/universidad|estudiar despues|continuar|ingenier|pedagogia|carrera superior/.test(q)) {
-        return "Todas las especialidades permiten continuidad de estudios. En cada página dedicada está la lista de **Continuidad de estudios**.";
-    }
-    if (/quien eres|que eres|ayuda|help|que puedes|para que sirves/.test(q)) {
-        return "Soy **JARVIE**, asistente del portafolio del Liceo Manuel Montt. Pregunta por especialidades, proyectos o contacto. Ejemplo: *especialidades* o *¿qué es programación?*";
-    }
-    if (/gracias|thanks|chao|adios|bye|nos vemos/.test(q)) {
-        return "¡De nada! Si necesitas algo más, aquí estaré. 😊";
-    }
-    return "No estoy seguro de eso 🤔 Prueba con **especialidades**, el nombre de una especialidad, **proyectos** o **contacto**.";
+    return "Prueba con **especialidades**, el nombre de una especialidad, **proyectos** o **contacto**. Si configuraste la API de Gemini, también respondo preguntas generales.";
 }
 
-function sendMessage() {
+async function getJarvieReplyAI(userText) {
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
+
+    const body = {
+        system_instruction: { parts: [{ text: JARVIE_SYSTEM }] },
+        contents: [{ role: "user", parts: [{ text: userText }] }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 512 }
+    };
+
+    const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+        const errText = await res.text().catch(() => "");
+        throw new Error("Gemini " + res.status + " " + errText.slice(0, 150));
+    }
+
+    const data = await res.json();
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) throw new Error("Respuesta vacía");
+    return text.trim();
+}
+
+async function sendMessage() {
     const chatInput = document.getElementById("chat-input");
     if (!chatInput) return;
     const userText = chatInput.value.trim();
@@ -470,12 +531,23 @@ function sendMessage() {
 
     const loadingElem = appendMessage("Pensando...", "bot");
 
-    setTimeout(() => {
-        const reply = getJarvieReply(userText);
+    try {
+        let reply;
+        if (GEMINI_API_KEY && GEMINI_API_KEY.length > 10) {
+            reply = await getJarvieReplyAI(userText);
+        } else {
+            reply = getJarvieReplyLocal(userText);
+        }
         loadingElem.innerHTML = formatMessageText(reply);
-        const chatMessages = document.getElementById("chat-messages");
-        if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 350);
+    } catch (err) {
+        console.error("JARVIE error:", err);
+        loadingElem.innerHTML = formatMessageText(
+            getJarvieReplyLocal(userText) + "\n\n_(IA no disponible; modo local.)_"
+        );
+    }
+
+    const chatMessages = document.getElementById("chat-messages");
+    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 function appendMessage(text, type) {
@@ -483,10 +555,8 @@ function appendMessage(text, type) {
     if (!chatMessages) return null;
 
     const div = document.createElement("div");
-    div.id = "msg-" + Date.now();
-    div.className = `chat-message ${type}`;
+    div.className = "chat-message " + type;
     div.innerHTML = formatMessageText(text);
-
     chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     return div;
@@ -500,7 +570,7 @@ function formatMessageText(text) {
 }
 
 /* ==========================================================================
-   8. ANIMACIONES FADE-IN (Intersection Observer)
+   8. ANIMACIONES FADE-IN
    ========================================================================== */
 function initFadeInAnimations() {
     const elements = document.querySelectorAll(
@@ -523,5 +593,5 @@ function initFadeInAnimations() {
         { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
 
-    elements.forEach((el) => observer.observe(el));
+    elements.forEach(el => observer.observe(el));
 }
