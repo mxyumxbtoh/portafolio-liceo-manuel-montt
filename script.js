@@ -24,19 +24,24 @@ const projectsData = [
     }
 ];
 
+// Variable global para rastrear el elemento que abrió un modal (Accesibilidad Focus)
+let lastFocusedElement = null;
+
 /* ==========================================================================
    INICIALIZACIÓN
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
     initNavbar();
     initThemeToggle();
-    initCounters();
+    initCountersObserver();
     initSearch();
     initComments();
     initModals();
     initScrollTop();
     initChatbot();
     initFadeInAnimations();
+    initProjectGridEvents();
+
     // Skeleton breve + render de proyectos
     showProjectSkeletons();
     setTimeout(() => renderProjects(projectsData), 450);
@@ -49,13 +54,13 @@ function initNavbar() {
 
     if (hamburger && navMenu) {
         hamburger.addEventListener("click", () => {
-            const isOpen = navMenu.classList.toggle("active");
+            const isOpen = navMenu.classList.toggle("open");
             hamburger.setAttribute("aria-expanded", isOpen ? "true" : "false");
         });
     }
     document.querySelectorAll(".nav-link").forEach(link => {
         link.addEventListener("click", () => {
-            navMenu?.classList.remove("active");
+            navMenu?.classList.remove("open");
             hamburger?.setAttribute("aria-expanded", "false");
         });
     });
@@ -67,13 +72,12 @@ function initThemeToggle() {
     const html = document.documentElement;
     if (!toggleBtn) return;
 
-    // Restaurar preferencia guardada
     const saved = localStorage.getItem("lm_theme");
     if (saved === "light" || saved === "dark") {
         html.setAttribute("data-theme", saved);
         toggleBtn.innerHTML = saved === "light"
-            ? '<i class="fa-solid fa-sun"></i>'
-            : '<i class="fa-solid fa-moon"></i>';
+            ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
+            : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
     }
 
     toggleBtn.addEventListener("click", () => {
@@ -82,40 +86,44 @@ function initThemeToggle() {
         html.setAttribute("data-theme", next);
         localStorage.setItem("lm_theme", next);
         toggleBtn.innerHTML = isDark
-            ? '<i class="fa-solid fa-sun"></i>'
-            : '<i class="fa-solid fa-moon"></i>';
+            ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
+            : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
     });
 }
 
-/* 3. CONTADORES */
-function initCounters() {
-    const counters = document.querySelectorAll(".stat-number");
-    let animated = false;
+/* 3. CONTADORES (Optimizado con IntersectionObserver) */
+function initCountersObserver() {
+    const section = document.getElementById("estadisticas");
+    if (!section) return;
 
-    const startCounters = () => {
-        counters.forEach(counter => {
-            const target = +counter.getAttribute("data-target");
-            if (target === 0) return;
-            let count = 0;
-            const step = Math.ceil(target / 50);
-            const timer = setInterval(() => {
-                count += step;
-                if (count >= target) {
-                    counter.innerText = target;
-                    clearInterval(timer);
-                } else {
-                    counter.innerText = count;
-                }
-            }, 20);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                startCounters();
+                observer.unobserve(entry.target);
+            }
         });
-    };
+    }, { threshold: 0.3 });
 
-    window.addEventListener("scroll", () => {
-        const section = document.getElementById("estadisticas");
-        if (section && section.getBoundingClientRect().top < window.innerHeight && !animated) {
-            startCounters();
-            animated = true;
-        }
+    observer.observe(section);
+}
+
+function startCounters() {
+    const counters = document.querySelectorAll(".stat-number");
+    counters.forEach(counter => {
+        const target = +counter.getAttribute("data-target");
+        if (target === 0) return;
+        let count = 0;
+        const step = Math.ceil(target / 50) || 1;
+        const timer = setInterval(() => {
+            count += step;
+            if (count >= target) {
+                counter.innerText = target.toLocaleString("es-CL");
+                clearInterval(timer);
+            } else {
+                counter.innerText = count.toLocaleString("es-CL");
+            }
+        }, 20);
     });
 }
 
@@ -145,42 +153,53 @@ function renderProjects(projects) {
     grid.innerHTML = "";
 
     if (projects.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No se encontraron proyectos.</p>`;
+        grid.innerHTML = `<p class="no-projects-msg">No se encontraron proyectos.</p>`;
         return;
     }
 
+    const fragment = document.createDocumentFragment();
+
     projects.forEach((p, idx) => {
-        const card = document.createElement("div");
+        const card = document.createElement("article");
         card.className = "project-card fade-in";
         card.style.setProperty("--i", idx);
         card.innerHTML = `
             <div class="project-img-wrapper">
-                <img src="${p.image}" alt="Proyecto ${p.title} - ${p.specialty}" loading="lazy">
-                <span class="project-badge">${p.specialty}</span>
+                <img src="${p.image}" alt="Proyecto ${escapeHTML(p.title)} - ${escapeHTML(p.specialty)}" loading="lazy" onerror="this.parentElement.classList.add('no-img')">
+                <span class="project-badge">${escapeHTML(p.specialty)}</span>
             </div>
             <div class="project-info">
-                <h3>${p.title}</h3>
-                <p class="project-author"><i class="fa-solid fa-user" aria-hidden="true"></i> ${p.student}</p>
-                <p class="project-desc">${p.description}</p>
-                ${p.year ? `<p class="project-year"><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${p.year}</p>` : ""}
-                <button class="btn-secondary view-project-btn" style="width:100%; margin-top:0.8rem;" data-id="${p.id}" aria-label="Ver detalles del proyecto ${p.title}">
+                <h3>${escapeHTML(p.title)}</h3>
+                <p class="project-author">${escapeHTML(p.student)}</p>
+                <p class="project-desc">${escapeHTML(p.description)}</p>
+                ${p.year ? `<p class="project-year">${escapeHTML(p.year)}</p>` : ""}
+                <button class="btn-secondary view-project-btn" data-id="${p.id}" aria-label="Ver detalles del proyecto ${escapeHTML(p.title)}">
                     Ver detalles
                 </button>
             </div>
         `;
-        grid.appendChild(card);
+        fragment.appendChild(card);
     });
 
-    // Activar fade-in inmediatamente después de insertar
+    grid.appendChild(fragment);
+
     requestAnimationFrame(() => {
         grid.querySelectorAll(".fade-in").forEach(el => el.classList.add("visible"));
     });
+}
 
-    document.querySelectorAll(".view-project-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const id = parseInt(e.currentTarget.getAttribute("data-id"));
+// Delegación de eventos para los botones del grid de proyectos
+function initProjectGridEvents() {
+    const grid = document.getElementById("projects-grid");
+    if (!grid) return;
+
+    grid.addEventListener("click", (e) => {
+        const btn = e.target.closest(".view-project-btn");
+        if (btn) {
+            lastFocusedElement = btn;
+            const id = parseInt(btn.getAttribute("data-id"), 10);
             openProjectModal(id);
-        });
+        }
     });
 }
 
@@ -207,6 +226,7 @@ function initSearch() {
             input.value = "";
             clearBtn.style.display = "none";
             renderProjects(projectsData);
+            input.focus();
         });
     }
 }
@@ -226,39 +246,48 @@ function initComments() {
         if (count) count.innerText = comments.length;
 
         if (comments.length === 0) {
-            list.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">Sin comentarios aún.</p>`;
+            list.innerHTML = `<p class="no-comments-msg">Sin comentarios aún. Sé el primero.</p>`;
             return;
         }
 
+        const fragment = document.createDocumentFragment();
         comments.forEach(c => {
             const item = document.createElement("div");
             item.className = "comment-item";
             item.innerHTML = `
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:0.3rem;">
-                    <strong style="color: var(--color-primary-blue);">${escapeHTML(c.author)}</strong>
-                    <span style="color: var(--text-muted);">${c.date}</span>
+                <div class="comment-header">
+                    <strong class="comment-author">${escapeHTML(c.author)}</strong>
+                    <span class="comment-date">${escapeHTML(c.date)}</span>
                 </div>
-                <p style="font-size: 0.88rem;">${escapeHTML(c.body)}</p>
+                <p class="comment-body">${escapeHTML(c.body)}</p>
             `;
-            list.appendChild(item);
+            fragment.appendChild(item);
         });
+        list.appendChild(fragment);
     };
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-        const author = document.getElementById("comment-author").value.trim();
-        const body = document.getElementById("comment-body").value.trim();
+        const authorInput = document.getElementById("comment-author");
+        const bodyInput = document.getElementById("comment-body");
+
+        const author = authorInput.value.trim();
+        const body = bodyInput.value.trim();
 
         if (author && body) {
             const comments = getComments();
             comments.unshift({
                 author,
                 body,
-                date: new Date().toLocaleDateString("es-CL")
+                date: new Date().toLocaleDateString("es-CL", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric"
+                })
             });
             localStorage.setItem("lm_comments", JSON.stringify(comments));
-            document.getElementById("comment-author").value = "";
-            document.getElementById("comment-body").value = "";
+            authorInput.value = "";
+            bodyInput.value = "";
             render();
         }
     });
@@ -267,6 +296,7 @@ function initComments() {
 }
 
 function escapeHTML(str) {
+    if (typeof str !== "string") return "";
     return str.replace(/[&<>'"]/g, tag => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     }[tag] || tag));
@@ -282,45 +312,18 @@ function initModals() {
         if (!modal) return;
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
+        if (lastFocusedElement) {
+            lastFocusedElement.focus();
+        }
     };
+
     if (closeBtn) closeBtn.onclick = closeModal;
     if (overlay) overlay.onclick = closeModal;
 
-    // Cerrar con Escape
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && modal?.classList.contains("active")) {
             closeModal();
         }
-    });
-
-    // Activar lectura completa de especialidades
-    document.querySelectorAll(".btn-read-more").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const card = e.target.closest(".specialty-card");
-            if (!card) return;
-
-            const titleEl = card.querySelector("h3");
-            const textEl = card.querySelector("p");
-            const tagsEl = card.querySelector(".tags");
-
-            if (!titleEl || !textEl) return;
-
-            const title = titleEl.innerText;
-            const fullText = textEl.innerText;
-            const tags = tagsEl ? tagsEl.innerHTML : "";
-
-            const modalBody = document.getElementById("modal-body");
-            if (!modalBody || !modal) return;
-
-            modalBody.innerHTML = `
-                <h2 style="margin-bottom: 1rem; color: var(--color-primary-blue);" id="modal-title">${title}</h2>
-                <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-main); margin-bottom: 1.5rem;">${fullText}</p>
-                <div class="tags">${tags}</div>
-            `;
-            modal.classList.add("active");
-            modal.setAttribute("aria-hidden", "false");
-            closeBtn?.focus();
-        });
     });
 }
 
@@ -334,13 +337,13 @@ function openProjectModal(id) {
     if (!modalBody || !modal) return;
 
     modalBody.innerHTML = `
-        <img src="${p.image}" alt="Imagen del proyecto ${p.title}" style="width:100%; border-radius:8px; height:180px; object-fit:cover; margin-bottom:1rem;">
-        <span class="badge">${p.specialty}</span>
-        <h2 style="margin: 0.5rem 0;" id="modal-title">${p.title}</h2>
-        <p style="color: var(--color-primary-blue); font-weight: 600;"><i class="fa-solid fa-user" aria-hidden="true"></i> Autor: ${p.student}</p>
-        ${p.year ? `<p style="color: var(--text-muted); font-size:0.85rem;"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Año: ${p.year}</p>` : ""}
-        <p style="color: var(--text-muted); margin: 0.8rem 0;">${p.description}</p>
-        <div class="tags">${p.techs.map(t => `<span>${t}</span>`).join('')}</div>
+        <img src="${p.image}" alt="Imagen del proyecto ${escapeHTML(p.title)}" class="modal-img" onerror="this.style.display='none'">
+        <span class="modal-badge">${escapeHTML(p.specialty)}</span>
+        <h2 class="modal-title" id="modal-title">${escapeHTML(p.title)}</h2>
+        <p class="modal-author">Autor: ${escapeHTML(p.student)}</p>
+        ${p.year ? `<p class="modal-year">Año: ${escapeHTML(p.year)}</p>` : ""}
+        <p class="modal-text">${escapeHTML(p.description)}</p>
+        <div class="tags">${p.techs.map(t => `<span>${escapeHTML(t)}</span>`).join('')}</div>
     `;
     modal.classList.add("active");
     modal.setAttribute("aria-hidden", "false");
@@ -350,16 +353,17 @@ function openProjectModal(id) {
 function initScrollTop() {
     const btn = document.getElementById("scrollTopBtn");
     if (!btn) return;
+
     window.addEventListener("scroll", () => {
         if (window.scrollY > 300) btn.classList.add("visible");
         else btn.classList.remove("visible");
-    });
+    }, { passive: true });
+
     btn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 /* ==========================================================================
    7. CHATBOT ASÍNCRONO - JARVIE
-   Liceo Bicentenario Manuel Montt
    ========================================================================== */
 function initChatbot() {
     const chatToggle = document.getElementById("chat-toggle");
@@ -377,6 +381,7 @@ function initChatbot() {
             document.getElementById("chat-input")?.focus();
         }
     };
+
     if (chatClose) {
         chatClose.onclick = () => {
             chatWindow.classList.remove("active");
@@ -393,22 +398,28 @@ function initChatbot() {
         });
     }
 
-    if (chatMessages && chatMessages.children.length === 0) {
+    // Mensaje de bienvenida JARVIE
+    if (chatMessages) {
+        chatMessages.innerHTML = "";
         appendMessage("¡Hola! 👋 Soy **JARVIE**, asistente de soporte virtual. ¿Qué te gustaría saber hoy?", "bot");
     }
 }
 
 async function sendMessage() {
     const chatInput = document.getElementById("chat-input");
+    const sendBtn = document.querySelector("#chat-form button[type='submit']");
     if (!chatInput) return;
+
     const userText = chatInput.value.trim();
     if (!userText) return;
 
-    // Mostrar mensaje del usuario
     appendMessage(userText, "user");
     chatInput.value = "";
 
-    // Mensaje de carga provisional
+    // Bloquear input mientras espera respuesta para evitar doble envío
+    chatInput.disabled = true;
+    if (sendBtn) sendBtn.disabled = true;
+
     const loadingElem = appendMessage("Pensando...", "bot");
 
     try {
@@ -428,8 +439,11 @@ async function sendMessage() {
             loadingElem.innerHTML = formatMessageText("Error: " + (data.error || "No se obtuvo respuesta"));
         }
     } catch (error) {
-        // En caso de fallo de red o servidor caído
-        loadingElem.innerHTML = formatMessageText("Error al conectar con el servidor.");
+        loadingElem.innerHTML = formatMessageText("No pude conectar con el servidor. ¿Está corriendo el backend en localhost:8000?");
+    } finally {
+        chatInput.disabled = false;
+        if (sendBtn) sendBtn.disabled = false;
+        chatInput.focus();
     }
 
     const chatMessages = document.getElementById("chat-messages");
@@ -452,16 +466,17 @@ function appendMessage(text, type) {
 
 function formatMessageText(text) {
     if (typeof text !== "string") return "";
-    return text
+    return escapeHTML(text)
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         .replace(/\n/g, "<br>");
 }
+
 /* ==========================================================================
    8. ANIMACIONES FADE-IN (Intersection Observer)
    ========================================================================== */
 function initFadeInAnimations() {
     const elements = document.querySelectorAll(
-        ".stat-card, .specialty-card, .contact-card, .credits-box, .section-header, .search-box"
+        ".specialty-card, .contact-card, .credits-box, .section-header, .search-box, .stat-item"
     );
     elements.forEach((el, i) => {
         el.classList.add("fade-in");

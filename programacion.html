@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Especialidad de Programación | Liceo Manuel Montt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="specialty.css">
+  <style>
+    :root {
+      --accent: #6b9fd4;
+      --accent-soft: rgba(107, 159, 212, 0.15);
+      --accent-hover: #8bb5e0;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a href="index.html" class="sidebar-logo">
+        <span class="logo-mark">PV</span>
+        <span>Portafolio<span>Virtual</span></span>
+      </a>
+      <ul class="nav-list">
+        <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+        <li><a href="index.html#especialidades"><i class="fa-solid fa-graduation-cap"></i> Especialidades</a></li>
+        <li><a href="index.html#proyectos"><i class="fa-solid fa-folder-open"></i> Proyectos</a></li>
+        <li><a href="index.html#comentarios"><i class="fa-solid fa-comments"></i> Comentarios</a></li>
+        <li><a href="index.html#contacto"><i class="fa-solid fa-envelope"></i> Contacto</a></li>
+        <li><a href="programacion.html" class="active"><i class="fa-solid fa-code"></i> Programación</a></li>
+        <li><a href="electricidad.html"><i class="fa-solid fa-bolt"></i> Electricidad</a></li>
+        <li><a href="contabilidad.html"><i class="fa-solid fa-calculator"></i> Contabilidad</a></li>
+        <li><a href="administracion.html"><i class="fa-solid fa-briefcase"></i> Administración</a></li>
+        <li><a href="construcciones-metalicas.html"><i class="fa-solid fa-industry"></i> Constr. Metálicas</a></li>
+        <li><a href="atencion-parvulos.html"><i class="fa-solid fa-child"></i> Atención de Párvulos</a></li>
+        <li><a href="agropecuaria.html"><i class="fa-solid fa-wheat-awn"></i> Agropecuaria</a></li>
+        <li><a href="gastronomia.html"><i class="fa-solid fa-utensils"></i> Gastronomía</a></li>
+      </ul>
+      <div class="sidebar-footer">Liceo Bicentenario<br>Manuel Montt · San Javier</div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <h1>Especialidad de <em>Programación</em></h1>
+        <a href="index.html#especialidades" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+      </div>
+
+      <section class="profile-card">
+        <img src="programacion-logo.png" alt="Logo Programación" class="profile-logo"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="profile-logo-fallback" style="display:none;"><i class="fa-solid fa-code"></i></div>
+        <div class="profile-info">
+          <h2>Programación</h2>
+          <p class="role">Especialidad Técnica · Liceo Bicentenario Manuel Montt</p>
+          <div class="profile-badges">
+            <span class="badge accent">HTML5</span>
+            <span class="badge">JavaScript</span>
+            <span class="badge">Python</span>
+            <span class="badge">MySQL</span>
+          </div>
+          <p class="profile-desc">
+            Forma técnicos con competencias en desarrollo de software, web, bases de datos, soporte y automatización. Alta demanda laboral y continuidad de estudios en el área TI.
+          </p>
+        </div>
+      </section>
+
+      <div class="stats-row">
+        <div class="stat-box"><div class="value">Alta</div><div class="label">Demanda laboral</div></div>
+        <div class="stat-box"><div class="value">~$1.19M</div><div class="label">Sueldo promedio</div></div>
+        <div class="stat-box"><div class="value">8+</div><div class="label">Áreas de estudio</div></div>
+        <div class="stat-box"><div class="value">TI</div><div class="label">Sector productivo</div></div>
+      </div>
+
+      <div class="sections-grid">
+        <article class="card">
+          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-briefcase"></i></span> Campo laboral</h3>
+          <p>Las tecnologías de la información se usan en casi todos los sectores. Un egresado puede trabajar en empresas privadas, instituciones públicas y emprendimientos tecnológicos.</p>
+          <ul class="list-clean">
+            <li>Desarrollo de software y aplicaciones</li>
+            <li>Desarrollo web y aplicaciones web</li>
+            <li>Programación de sistemas y bases de datos</li>
+            <li>Soporte técnico y mantenimiento</li>
+            <li>Telecomunicaciones, bancos y seguros</li>
+            <li>Agencias de marketing digital</li>
+            <li>Videojuegos y soluciones digitales</li>
+            <li>Robótica, Arduino y automatización</li>
+            <li>Emprendimientos independientes</li>
+          </ul>
+        </article>
+        <div style="display:flex;flex-direction:column;gap:1.15rem;">
+          <article class="card" style="flex:1;">
+            <h3 class="card-title"><span class="icon"><i class="fa-solid fa-graduation-cap"></i></span> Continuidad de estudios</h3>
+            <ul class="list-clean">
+              <li>Técnico en Computación e Informática</li>
+              <li>Analista Programador</li>
+              <li>Ingeniería en Informática</li>
+              <li>Ingeniería de Software</li>
+              <li>Ciberseguridad</li>
+              <li>Ciencia de Datos</li>
+              <li>Desarrollo de aplicaciones</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3 class="card-title"><span class="icon"><i class="fa-solid fa-user-tie"></i></span> Jefe de Carrera</h3>
+            <div class="jefe-row">
+              <div class="jefe-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+              <div>
+                <h3>German Villar Martinez</h3>
+                <p>Jefe de Carrera · Programación</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <article class="card" style="margin-bottom:1.15rem;">
+        <h3 class="card-title"><span class="icon"><i class="fa-solid fa-money-bill-wave"></i></span> Sueldos en Chile (referencia 2026)</h3>
+        <p>Los ingresos varían según experiencia y especialización. Datos referenciales según Indeed (agosto 2026).</p>
+        <div class="salary-grid">
+          <div class="salary-item"><div class="lvl">Junior</div><div class="amt">$945.000 – $952.000</div></div>
+          <div class="salary-item"><div class="lvl">Desarrollador</div><div class="amt">~$1.192.000</div></div>
+          <div class="salary-item"><div class="lvl">Senior</div><div class="amt">~$1.785.000</div></div>
+        </div>
+        <div class="note"><strong>Ingreso mínimo 2026:</strong> $553.553. Con experiencia, especialización y estudios superiores el sueldo puede superar ampliamente estos promedios.</div>
+      </article>
+
+      <div class="sections-grid">
+        <article class="card">
+          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-lightbulb"></i></span> Importancia</h3>
+          <p>La programación es clave para la transformación digital. No solo se trata de escribir código: implica analizar problemas, diseñar soluciones, administrar información y mejorar procesos con tecnología.</p>
+          <p>El Liceo Manuel Montt creó esta especialidad ante la creciente demanda de profesionales TI y para fortalecer el pensamiento computacional de los estudiantes.</p>
+        </article>
+        <article class="card">
+          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-user-check"></i></span> Perfil de egreso</h3>
+          <p>El egresado puede participar en proyectos informáticos, desarrollar aplicaciones y sitios web, trabajar con bases de datos, mantener software y hardware, instalar sistemas operativos y entregar soporte técnico.</p>
+          <p>Estas competencias permiten incorporarse a cargos técnicos o continuar estudios hacia roles de mayor especialización.</p>
+        </article>
+      </div>
+
+      <article class="card" style="margin-bottom:1.15rem;">
+        <h3 class="card-title"><span class="icon"><i class="fa-solid fa-bookmark"></i></span> Resumen</h3>
+        <p>La especialidad de Programación prepara para un sector en constante evolución. Destacan la variedad de áreas laborales, la continuidad de estudios, las competencias digitales y las oportunidades de crecimiento en la industria tecnológica. En Chile los ingresos pueden partir cerca del millón de pesos y subir con experiencia y especialización.</p>
+      </article>
+
+      <div class="cta-bar">
+        <p>¿Quieres ver más especialidades o los proyectos de los estudiantes?</p>
+        <div class="cta-actions">
+          <a href="index.html#especialidades" class="btn btn-primary"><i class="fa-solid fa-arrow-left"></i> Especialidades</a>
+          <a href="index.html#proyectos" class="btn btn-outline"><i class="fa-solid fa-folder-open"></i> Proyectos</a>
+        </div>
+      </div>
+    </main>
+  </div>
+  <button class="mobile-toggle" id="menuToggle" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('menuToggle');
+    toggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      const icon = toggle.querySelector('i');
+      icon.className = sidebar.classList.contains('open')
+        ? 'fa-solid fa-xmark'
+        : 'fa-solid fa-bars';
+    });
+    document.querySelectorAll('.nav-list a').forEach(a => {
+      a.addEventListener('click', () => {
+        if (window.innerWidth <= 900) {
+          sidebar.classList.remove('open');
+          toggle.querySelector('i').className = 'fa-solid fa-bars';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

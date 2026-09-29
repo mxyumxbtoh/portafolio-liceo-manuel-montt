@@ -5,29 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portafolio Virtual | Liceo Manuel Montt</title>
 
-  <!-- Fuente y FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Skip link accesibilidad -->
   <a href="#inicio" class="skip-link">Saltar al contenido principal</a>
 
   <!-- NAVBAR -->
   <header class="navbar-container" id="navbar" role="banner">
     <nav class="navbar" aria-label="Navegación principal">
       <a href="#inicio" class="logo" aria-label="Portafolio Virtual - Inicio">
-        <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
-        <span>Portafolio<b>Virtual</b></span>
+        <span class="logo-mark">PV</span>
+        <span class="logo-text">Portafolio<span>Virtual</span></span>
       </a>
 
       <button class="hamburger" id="hamburger" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="nav-menu">
-        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        <span></span><span></span><span></span>
       </button>
 
       <ul class="nav-menu" id="nav-menu" role="menubar">
@@ -40,11 +37,11 @@
       </ul>
 
       <div class="nav-actions">
-        <button class="theme-toggle" id="theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar tema claro u oscuro">
+        <button class="theme-toggle" id="theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar tema">
           <i class="fa-solid fa-moon" aria-hidden="true"></i>
         </button>
-        <a href="#proyectos" class="btn-primary">
-          <i class="fa-solid fa-rocket" aria-hidden="true"></i> Explorar
+        <a href="#proyectos" class="btn-primary btn-nav">
+          Ver proyectos
         </a>
       </div>
     </nav>
@@ -52,26 +49,28 @@
 
   <!-- HERO -->
   <section class="hero" id="inicio">
+    <div class="hero-grain" aria-hidden="true"></div>
     <div class="section-container hero-container">
       <div class="hero-content">
-        <span class="badge">
-          <i class="fa-solid fa-graduation-cap"></i> Liceo Bicentenario Manuel Montt
-        </span>
+        <p class="hero-eyebrow">Liceo Bicentenario Manuel Montt · San Javier</p>
         <h1 class="hero-title">
-          Mostramos el talento que <span class="highlight-yellow">construye el futuro</span>.
+          El talento técnico que<br>
+          <em>construye</em> el futuro
         </h1>
         <p class="hero-description">
-          Vitrina tecnológica para dar a conocer los proyectos desarrollados por nuestros estudiantes técnicos.
+          Aquí se muestran los proyectos reales de estudiantes de Educación Media Técnico-Profesional.
+          No es un catálogo. Es el trabajo de quienes están aprendiendo oficios concretos.
         </p>
         <div class="hero-buttons">
-          <a href="#proyectos" class="btn-primary"><i class="fa-solid fa-folder-open"></i> Proyectos</a>
-          <a href="#especialidades" class="btn-secondary"><i class="fa-solid fa-circle-info"></i> Especialidades</a>
+          <a href="#proyectos" class="btn-primary">Explorar proyectos</a>
+          <a href="#especialidades" class="btn-secondary">Conocer especialidades</a>
         </div>
       </div>
 
       <div class="hero-visual">
-        <div class="visual-card">
-          <img src="liceo_manuel_banner.png" alt="Liceo Manuel Montt Banner" class="hero-img">
+        <div class="visual-frame">
+          <img src="liceo_manuel_banner.png" alt="Estudiantes del Liceo Manuel Montt" class="hero-img" onerror="this.style.display='none'">
+          <div class="visual-caption">Liceo Manuel Montt — San Javier</div>
         </div>
       </div>
     </div>
@@ -81,25 +80,21 @@
   <section class="stats-section" id="estadisticas">
     <div class="section-container">
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fa-solid fa-diagram-project"></i></div>
-          <div class="stat-number" data-target="2">0</div>
-          <p class="stat-label">Proyectos realizados</p>
+        <div class="stat-item">
+          <span class="stat-number" data-target="2">0</span>
+          <span class="stat-label">Proyectos publicados</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fa-solid fa-user-graduate"></i></div>
-          <div class="stat-number" data-target="1502">0</div>
-          <p class="stat-label">Estudiantes activos</p>
+        <div class="stat-item">
+          <span class="stat-number" data-target="1502">0</span>
+          <span class="stat-label">Estudiantes en formación</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fa-solid fa-gears"></i></div>
-          <div class="stat-number" data-target="8">0</div>
-          <p class="stat-label">Especialidades</p>
+        <div class="stat-item">
+          <span class="stat-number" data-target="8">0</span>
+          <span class="stat-label">Especialidades técnicas</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
-          <div class="stat-number" data-target="89">0</div>
-          <p class="stat-label">Años de trayectoria</p>
+        <div class="stat-item">
+          <span class="stat-number" data-target="89">0</span>
+          <span class="stat-label">Años formando oficios</span>
         </div>
       </div>
     </div>
@@ -109,9 +104,9 @@
   <section class="search-section">
     <div class="section-container">
       <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="search-input" placeholder="Buscar por proyecto, alumno o tecnología...">
-        <button id="clear-search" class="clear-search-btn" title="Limpiar" style="display: none;">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input type="text" id="search-input" placeholder="Busca un proyecto, estudiante o tecnología…" autocomplete="off">
+        <button id="clear-search" class="clear-search-btn" title="Limpiar" style="display: none;" aria-label="Limpiar búsqueda">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -121,157 +116,162 @@
   <!-- ESPECIALIDADES -->
   <section class="specialties-section" id="especialidades">
     <div class="section-container">
-      <div class="section-header">
-        <span class="sub-title">Áreas de Formación</span>
-        <h2>Especialidades Técnicas</h2>
+      <div class="section-header left-aligned">
+        <p class="sub-title">Oficios que se enseñan aquí</p>
+        <h2>Especialidades</h2>
+        <p class="section-intro">Cada una forma técnicos de nivel medio con competencias concretas para el mundo del trabajo.</p>
       </div>
 
       <div class="specialties-grid">
 
-        <!-- Programación (con botón Ver más) -->
-        <div class="specialty-card">
-          <div class="spec-header">
-            <i class="fa-solid fa-code spec-icon"></i>
+        <!-- Programación - featured -->
+        <article class="specialty-card featured">
+          <div class="spec-top">
+            <span class="spec-label">Tecnologías</span>
             <h3>Programación</h3>
           </div>
           <p class="spec-description">
-            La especialidad de Programación, del sector Tecnologías y Comunicaciones, forma estudiantes de Educación Media Técnico-Profesional en competencias avanzadas de informática. Es una de las carreras más demandadas, con empleos en telecomunicaciones, bancos, seguros, servicios informáticos, agencias de marketing, instituciones públicas y editoras. Los egresados configuran computadores, instalan redes e intranet, programan sitios web y aplicaciones, usan Arduino y desarrollan robots. Adquieren competencias para crear programas y bases de datos, instalar sistemas, desarrollar aplicaciones orientadas a objetos y web, mantener software, dar soporte técnico e instalar hardware, sistemas operativos y utilitarios según requerimientos.
+            Formamos estudiantes capaces de construir sitios web, aplicaciones y sistemas. Aprenden a configurar equipos, armar redes, programar y dar soporte técnico. Es una de las salidas laborales con más demanda hoy.
           </p>
-          <button class="btn-read-more" type="button">
-            Ver más <i class="fa-solid fa-plus"></i>
-          </button>
-          <div class="tags">
-            <span>HTML5</span>
-            <span>JavaScript</span>
-            <span>Python</span>
-            <span>MySQL</span>
+          <div class="spec-footer">
+            <div class="tags">
+              <span>HTML / CSS</span>
+              <span>JavaScript</span>
+              <span>Python</span>
+              <span>MySQL</span>
+            </div>
+            <a href="programacion.html" class="spec-link">Conocer más</a>
           </div>
-        </div>
+        </article>
 
-        <div class="specialty-card">
-          <div class="spec-header">
-            <i class="fa-solid fa-bolt spec-icon"></i>
+        <!-- Electricidad -->
+        <article class="specialty-card">
+          <div class="spec-top">
+            <span class="spec-label">Energía</span>
             <h3>Electricidad</h3>
           </div>
           <p class="spec-description">
-            El técnico de nivel medio en Electricidad puede realizar instalaciones, reparaciones y mantenimiento eléctrico en baja tensión, especialmente en domicilios, oficinas y pequeñas empresas, pudiendo obtener la Licencia Clase D de la SEC. También puede trabajar como ayudante de mantención eléctrica. Sus principales competencias incluyen interpretar planos y especificaciones, diseñar circuitos mediante CAD, ejecutar instalaciones de alumbrado, calefacción y fuerza motriz, calcular materiales y costos, mantener sistemas eléctricos monofásicos y trifásicos, y operar sistemas de control, protección y equipos eléctricos y electrónicos, respetando siempre la normativa y seguridad vigente.
+            Instalaciones, reparación y mantención en baja tensión. Los estudiantes aprenden a leer planos, armar tableros y trabajar con seguridad según normativa SEC. Muchos obtienen la Licencia Clase D.
           </p>
-          <button class="btn-read-more" type="button">
-            Ver más <i class="fa-solid fa-plus"></i>
-          </button>
-          <div class="tags">
-            <span>PLCs</span>
-            <span>CadSimu</span>
-            <span>Tableros</span>
+          <div class="spec-footer">
+            <div class="tags">
+              <span>PLCs</span>
+              <span>Tableros</span>
+              <span>CadSimu</span>
+            </div>
+            <a href="electricidad.html" class="spec-link">Conocer más</a>
           </div>
-        </div>
+        </article>
 
-        <div class="specialty-card">
-          <div class="spec-header">
-            <i class="fa-solid fa-calculator spec-icon"></i>
+        <!-- Contabilidad -->
+        <article class="specialty-card">
+          <div class="spec-top">
+            <span class="spec-label">Gestión</span>
             <h3>Contabilidad</h3>
           </div>
           <p class="spec-description">
-            El técnico de nivel medio en Contabilidad puede desempeñarse en empresas privadas, organismos públicos o de forma independiente, principalmente en áreas de Finanzas y Contabilidad. Sus funciones incluyen registrar y procesar documentos y operaciones contables, realizar asientos, balances, conciliaciones, controles de caja e inventarios, y liquidar impuestos. Además, utiliza sistemas y software contables, aplica normas internacionales de contabilidad y legislación tributaria, organiza información, prepara informes y atiende a clientes, manteniendo orden, precisión y cumplimiento de los procedimientos establecidos.
+            Registro de operaciones, balances, liquidación de impuestos y uso de software contable. Prepara para trabajar en empresas, organismos públicos o de forma independiente.
           </p>
-          <button class="btn-read-more" type="button">
-            Ver más <i class="fa-solid fa-plus"></i>
-          </button>
-          <div class="tags">
-            <span>ERP</span>
-            <span>Tributación</span>
-            <span>Excel</span>
+          <div class="spec-footer">
+            <div class="tags">
+              <span>ERP</span>
+              <span>Tributación</span>
+              <span>Excel</span>
+            </div>
+            <a href="contabilidad.html" class="spec-link">Conocer más</a>
           </div>
-        </div>
+        </article>
 
-        <div class="specialty-card">
-          <div class="spec-header">
-            <i class="fa-solid fa-briefcase spec-icon"></i>
+        <!-- Administración -->
+        <article class="specialty-card">
+          <div class="spec-top">
+            <span class="spec-label">Gestión</span>
             <h3>Administración</h3>
           </div>
           <p class="spec-description">
-            El técnico de nivel medio en Recursos Humanos puede desempeñarse en empresas privadas y organismos públicos, principalmente en departamentos de personal o recursos humanos. Sus principales funciones incluyen gestionar contratos de trabajo, remuneraciones y finiquitos, calcular obligaciones tributarias y previsionales, mantener actualizada la información del personal y apoyar procesos de capacitación, evaluación y promoción. Además, puede realizar descripción de cargos, reclutamiento e inducción de trabajadores, aplicando la legislación vigente y los procedimientos establecidos. Todo esto requiere organización, responsabilidad y manejo adecuado de información laboral.
+            Enfocada en recursos humanos: contratos, remuneraciones, finiquitos y apoyo a procesos de reclutamiento e inducción. Organización y manejo de información laboral.
           </p>
-          <button class="btn-read-more" type="button">
-            Ver más <i class="fa-solid fa-plus"></i>
-          </button>
-          <div class="tags">
-            <span>RRHH</span>
-            <span>Logística</span>
-            <span>Atención</span>
+          <div class="spec-footer">
+            <div class="tags">
+              <span>RRHH</span>
+              <span>Logística</span>
+            </div>
+            <a href="administracion.html" class="spec-link">Conocer más</a>
           </div>
-        </div>
+        </article>
 
-        <div class="specialty-card">
-          <div class="spec-header">
-            <i class="fa-solid fa-industry spec-icon"></i>
+        <!-- Construcciones Metálicas -->
+        <article class="specialty-card">
+          <div class="spec-top">
+            <span class="spec-label">Oficio</span>
             <h3>Construcciones Metálicas</h3>
           </div>
           <p class="spec-description">
-            El técnico de nivel medio en Construcciones Metálicas puede trabajar de forma dependiente o independiente como armador, soldador e instalador de estructuras metálicas. Sus principales competencias incluyen interpretar planos, medir y trazar piezas, fabricar, unir, reparar y montar estructuras mediante corte, soldadura y mecanizado. También realiza mantenimiento de herramientas y equipos, aplica tratamientos anticorrosivos, gestiona residuos y calcula materiales necesarios. Todas estas labores se desarrollan siguiendo especificaciones técnicas y normas de seguridad, higiene y protección del medio ambiente.
+            Armado, soldadura y montaje de estructuras. Interpretación de planos, corte, mecanizado y tratamientos anticorrosivos, siempre bajo normas de seguridad.
           </p>
-          <button class="btn-read-more" type="button">
-            Ver más <i class="fa-solid fa-plus"></i>
-          </button>
-          <div class="tags">
-            <span>Soldadura</span>
-            <span>Planos</span>
-            <span>Estructuras</span>
+          <div class="spec-footer">
+            <div class="tags">
+              <span>Soldadura</span>
+              <span>Estructuras</span>
+            </div>
+            <a href="construcciones-metalicas.html" class="spec-link">Conocer más</a>
           </div>
-        </div>
+        </article>
 
-        <div class="specialty-card">
-          <div class="spec-header">
-            <i class="fa-solid fa-child spec-icon"></i>
+        <!-- Atención de Párvulos -->
+        <article class="specialty-card">
+          <div class="spec-top">
+            <span class="spec-label">Educación</span>
             <h3>Atención de Párvulos</h3>
           </div>
           <p class="spec-description">
-            El técnico de nivel medio en Atención de Párvulos puede trabajar en jardines infantiles, salas cunas y establecimientos escolares públicos o privados. Sus principales funciones son apoyar el desarrollo cognitivo, emocional, social y psicomotor de niños y niñas menores de seis años, realizar actividades educativas y recreativas, preparar materiales, fomentar hábitos de higiene, salud y alimentación, y colaborar con educadoras y familias. Además, debe velar por el bienestar y seguridad de los párvulos, registrar información y actuar ante accidentes o situaciones que requieran atención.
+            Apoyo al desarrollo de niños y niñas menores de seis años en jardines y salas cunas. Actividades educativas, hábitos de higiene y colaboración con educadoras y familias.
           </p>
-          <button class="btn-read-more" type="button">
-            Ver más <i class="fa-solid fa-plus"></i>
-          </button>
-          <div class="tags">
-            <span>Pedagogía</span>
-            <span>Primeros Auxilios</span>
+          <div class="spec-footer">
+            <div class="tags">
+              <span>Pedagogía</span>
+              <span>Primeros Auxilios</span>
+            </div>
+            <a href="atencion-parvulos.html" class="spec-link">Conocer más</a>
           </div>
-        </div>
+        </article>
 
-        <div class="specialty-card">
-          <div class="spec-header">
-            <i class="fa-solid fa-seedling spec-icon"></i>
+        <!-- Agropecuaria -->
+        <article class="specialty-card">
+          <div class="spec-top">
+            <span class="spec-label">Campo</span>
             <h3>Agropecuaria</h3>
           </div>
           <p class="spec-description">
-            El técnico de nivel medio en Vitivinicultura puede trabajar en empresas dedicadas al cultivo de uvas, producción, envasado y almacenamiento de vino, además de industrias de productos derivados de la uva. Sus principales funciones incluyen cuidar viñedos, cosechar y preparar uvas, apoyar el proceso de elaboración del vino, realizar envasado, etiquetado y almacenamiento. También verifica el funcionamiento de maquinaria y equipos, aplicando normas de higiene, calidad y procedimientos técnicos para asegurar un proceso productivo adecuado.
+            Especialidad orientada a vitivinicultura: cuidado de viñedos, cosecha, elaboración y envasado de vino, con foco en higiene, calidad y uso de maquinaria.
           </p>
-          <button class="btn-read-more" type="button">
-            Ver más <i class="fa-solid fa-plus"></i>
-          </button>
-          <div class="tags">
-            <span>Drones</span>
-            <span>Riego</span>
-            <span>Sustentabilidad</span>
+          <div class="spec-footer">
+            <div class="tags">
+              <span>Riego</span>
+              <span>Sustentabilidad</span>
+            </div>
+            <a href="agropecuaria.html" class="spec-link">Conocer más</a>
           </div>
-        </div>
+        </article>
 
-        <div class="specialty-card">
-          <div class="spec-header">
-            <i class="fa-solid fa-utensils spec-icon"></i>
+        <!-- Gastronomía -->
+        <article class="specialty-card">
+          <div class="spec-top">
+            <span class="spec-label">Cocina</span>
             <h3>Gastronomía</h3>
           </div>
           <p class="spec-description">
-            El técnico de nivel medio en Gastronomía, mención Cocina, puede trabajar en restaurantes, hoteles, casinos y empresas de alimentación. Sus principales funciones incluyen preparar platos de cocina nacional e internacional, elaborar productos gastronómicos de calidad y adaptar recetas según las necesidades de los clientes. También puede diseñar menús considerando la temporada, los requerimientos nutricionales, el tipo de cliente y la disponibilidad de ingredientes, aplicando técnicas culinarias, normas de higiene y estándares de calidad durante la preparación y presentación de los alimentos.
+            Preparación de platos nacionales e internacionales, diseño de menús y estándares de higiene. Pensada para restaurantes, hoteles y servicios de alimentación.
           </p>
-          <button class="btn-read-more" type="button">
-            Ver más <i class="fa-solid fa-plus"></i>
-          </button>
-          <div class="tags">
-            <span>Cocina</span>
-            <span>HACCP</span>
-            <span>Pastelería</span>
+          <div class="spec-footer">
+            <div class="tags">
+              <span>Cocina</span>
+              <span>HACCP</span>
+              <span>Pastelería</span>
+            </div>
+            <a href="gastronomia.html" class="spec-link">Conocer más</a>
           </div>
-        </div>
+        </article>
 
       </div>
     </div>
@@ -280,9 +280,10 @@
   <!-- PROYECTOS -->
   <section class="projects-section" id="proyectos">
     <div class="section-container">
-      <div class="section-header">
-        <span class="sub-title">Muestra Estudiantil</span>
-        <h2>Proyectos Destacados</h2>
+      <div class="section-header left-aligned">
+        <p class="sub-title">Trabajo de estudiantes</p>
+        <h2>Proyectos destacados</h2>
+        <p class="section-intro">Resultados concretos de lo que se aprende en cada especialidad.</p>
       </div>
       <div class="projects-grid" id="projects-grid"></div>
     </div>
@@ -291,26 +292,26 @@
   <!-- COMENTARIOS -->
   <section class="comments-section" id="comentarios">
     <div class="section-container">
-      <div class="section-header">
-        <span class="sub-title">Comunidad</span>
+      <div class="section-header left-aligned">
+        <p class="sub-title">Comunidad</p>
         <h2>Comentarios</h2>
       </div>
 
       <div class="comments-wrapper">
         <form id="comment-form" class="comment-form">
           <div class="form-group">
-            <label for="comment-author">Tu Nombre</label>
-            <input type="text" id="comment-author" placeholder="Ej. Juan Pérez" required>
+            <label for="comment-author">Nombre</label>
+            <input type="text" id="comment-author" placeholder="Tu nombre" required>
           </div>
           <div class="form-group">
-            <label for="comment-body">Comentario</label>
-            <textarea id="comment-body" rows="4" placeholder="Escribe tu mensaje..." required></textarea>
+            <label for="comment-body">Mensaje</label>
+            <textarea id="comment-body" rows="4" placeholder="Escribe lo que quieras compartir…" required></textarea>
           </div>
-          <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Publicar</button>
+          <button type="submit" class="btn-primary">Publicar comentario</button>
         </form>
 
-        <div>
-          <h3>Comentarios (<span id="comment-count">0</span>)</h3>
+        <div class="comments-side">
+          <h3 class="comments-count-title">Comentarios (<span id="comment-count">0</span>)</h3>
           <div class="comments-list" id="comments-list"></div>
         </div>
       </div>
@@ -321,9 +322,9 @@
   <section class="credits-section" id="creditos">
     <div class="section-container">
       <div class="credits-box">
-        <i class="fa-solid fa-award credits-award-icon"></i>
-        <h2>Créditos del Proyecto</h2>
-        <p>Diseñado y programado de forma integral por el estudiante <strong>Alberto Jaque</strong>.</p>
+        <p class="credits-label">Créditos</p>
+        <h2>Hecho por un estudiante</h2>
+        <p>Diseñado y programado de forma integral por <strong>Alberto Jaque</strong>.</p>
       </div>
     </div>
   </section>
@@ -331,82 +332,71 @@
   <!-- CONTACTO -->
   <section class="contact-section" id="contacto">
     <div class="section-container">
-      <div class="section-header">
-        <span class="sub-title">Atención e Información</span>
-        <h2>Contacto Institucional</h2>
+      <div class="section-header left-aligned">
+        <p class="sub-title">Información</p>
+        <h2>Contacto</h2>
       </div>
 
       <div class="contact-grid">
-        <a href="https://www.liceomanuelmontt.cl/" target="_blank" class="contact-card">
-          <i class="fa-solid fa-globe contact-icon"></i>
-          <h3>Web Oficial</h3>
-          <p>liceomanuelmontt.cl</p>
+        <a href="https://www.liceomanuelmontt.cl/" target="_blank" rel="noopener" class="contact-card">
+          <span class="contact-label">Sitio web</span>
+          <span class="contact-value">liceomanuelmontt.cl</span>
         </a>
         <a href="mailto:secretaria.direccion@liceomanuelmontt.cl" class="contact-card">
-          <i class="fa-solid fa-envelope contact-icon"></i>
-          <h3>Correo</h3>
-          <p>secretaria.direccion@liceomanuelmontt.cl</p>
+          <span class="contact-label">Correo</span>
+          <span class="contact-value">secretaria.direccion@liceomanuelmontt.cl</span>
         </a>
-        <a href="tel:732321971" class="contact-card">
-          <i class="fa-solid fa-phone contact-icon"></i>
-          <h3>Teléfono</h3>
-          <p>(73) 232 1971</p>
+        <a href="tel:+56732321971" class="contact-card">
+          <span class="contact-label">Teléfono</span>
+          <span class="contact-value">(73) 232 1971</span>
         </a>
       </div>
     </div>
   </section>
 
   <footer class="footer">
-    <p>&copy; Liceo Bicentenario Manuel Montt — San Javier.</p>
+    <div class="section-container footer-inner">
+      <p>Liceo Bicentenario Manuel Montt — San Javier</p>
+      <p class="footer-note">Portafolio Virtual de proyectos estudiantiles</p>
+    </div>
   </footer>
 
-  <!-- MODAL DE PROYECTO -->
+  <!-- MODAL -->
   <div class="modal" id="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
     <div class="modal-overlay" id="modal-overlay"></div>
     <div class="modal-content">
-      <button class="modal-close" id="modal-close" aria-label="Cerrar ventana"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      <button class="modal-close" id="modal-close" aria-label="Cerrar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
       <div id="modal-body"></div>
     </div>
   </div>
 
-  <!-- BOTÓN ARRIBA -->
-  <button id="scrollTopBtn" class="scroll-top-btn" title="Volver arriba">
+  <!-- SCROLL TOP -->
+  <button id="scrollTopBtn" class="scroll-top-btn" title="Volver arriba" aria-label="Volver arriba">
     <i class="fa-solid fa-arrow-up"></i>
   </button>
 
-  <!-- ===================== CHATBOT FLOTANTE (INTEGRADO) ===================== -->
-  <button id="chat-toggle" class="chat-toggle-btn" title="Asistente Virtual" aria-label="Abrir asistente virtual JARVIE" aria-expanded="false" aria-controls="chat-window">
+  <!-- CHATBOT -->
+  <button id="chat-toggle" class="chat-toggle-btn" title="Asistente" aria-label="Abrir asistente" aria-expanded="false" aria-controls="chat-window">
     <i class="fa-solid fa-comments" aria-hidden="true"></i>
   </button>
 
-  <div id="chat-window" class="chatbot-container" role="dialog" aria-label="Asistente virtual JARVIE" aria-hidden="true">
+  <div id="chat-window" class="chatbot-container" role="dialog" aria-label="Asistente virtual" aria-hidden="true">
     <div class="chat-header">
       <div class="chat-header-info">
-        <i class="fa-solid fa-robot" aria-hidden="true"></i>
-        <h4>Asistente Virtual</h4>
+        <span class="chat-avatar">JV</span>
+        <h4>Asistente</h4>
       </div>
       <button id="chat-close" class="chat-close-btn" aria-label="Cerrar chat">
         <i class="fa-solid fa-xmark" aria-hidden="true"></i>
       </button>
     </div>
-
-    <!-- Mensajes del chat -->
-    <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
-      <div class="mensaje bot">¡Hola! ¿En qué puedo ayudarte hoy?</div>
+    <div id="chat-messages" class="chat-messages" role="log" aria-live="polite">
+      <div class="mensaje bot">Hola. ¿En qué te puedo ayudar?</div>
     </div>
-
-    <!-- Input del chat -->
     <form id="chat-form" class="chat-input-area">
-      <label for="chat-input" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;">Escribe tu mensaje</label>
-      <input 
-        type="text" 
-        id="chat-input" 
-        placeholder="Escribe tu mensaje aquí..." 
-        autocomplete="off" 
-        required
-        aria-label="Mensaje para el asistente"
-      >
-      <button type="submit" id="chat-send" title="Enviar" aria-label="Enviar mensaje">
+      <label for="chat-input" class="visually-hidden">Mensaje</label>
+      <input type="text" id="chat-input" placeholder="Escribe aquí…" autocomplete="off" required aria-label="Mensaje">
+      <button type="submit" id="chat-send" aria-label="Enviar">
         <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
       </button>
     </form>
