@@ -405,49 +405,77 @@ function initChatbot() {
     }
 }
 
-async function sendMessage() {
-    const chatInput = document.getElementById("chat-input");
-    const sendBtn = document.querySelector("#chat-form button[type='submit']");
-    if (!chatInput) return;
+function getJarvieReply(text) {
+    const q = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+    if (/^(hola|ola|buenas|hey|hi|hello|que tal|que onda)\b/.test(q) || (q.length < 4 && /hola|ola|hi/.test(q))) {
+        return "¡Hola! 👋 Soy **JARVIE**, asistente del Portafolio Virtual del Liceo Bicentenario Manuel Montt (San Javier). Puedo contarte sobre las **especialidades**, proyectos, contacto o cómo navegar el sitio. ¿Qué necesitas?";
+    }
+    if (/especialidad|especialidades|que enseñan|que carreras|que oficios|que tecnicos/.test(q)) {
+        return "El liceo ofrece **8 especialidades** técnico-profesionales:\n\n1. **Programación**\n2. **Electricidad**\n3. **Contabilidad**\n4. **Administración (RRHH)**\n5. **Construcciones Metálicas**\n6. **Atención de Párvulos**\n7. **Agropecuaria**\n8. **Gastronomía (Cocina)**\n\nEscribe el nombre de una para ver más detalles, o ve a la sección **Especialidades** y pulsa *Ver más*.";
+    }
+    if (/programac|software|codigo|web|python|javascript|informatica/.test(q)) {
+        return "**Programación**: forma técnicos en desarrollo de software, páginas web, bases de datos, soporte y automatización (Arduino). Alta demanda laboral.\n\n👉 Más info: página **Programación** (botón Ver más).";
+    }
+    if (/electric|instalacion|tablero|fotovolta|plc/.test(q)) {
+        return "**Electricidad**: instalaciones residenciales/comerciales, mantenimiento industrial, tableros, automatización y energías renovables.\n\n👉 Página: **Electricidad**.";
+    }
+    if (/contabil|tributar|impuesto|erp|balance|finanza/.test(q)) {
+        return "**Contabilidad**: registro contable, tributaria, remuneraciones, ERP y finanzas.\n\n👉 Página: **Contabilidad**.";
+    }
+    if (/administr|rrhh|recursos humanos|remuneracion|contrato|finiquito|reclut/.test(q)) {
+        return "**Administración (RRHH)**: contratos, liquidaciones, finiquitos, reclutamiento y legislación laboral.\n\n👉 Página: **Administración**.";
+    }
+    if (/metal|soldadur|mig|tig|estructura metal|cerrajer/.test(q)) {
+        return "**Construcciones Metálicas**: soldadura (MIG/TIG/MAG), planos CAD, montaje estructural y metalmecánica.\n\n👉 Página: **Construcciones Metálicas**.";
+    }
+    if (/parvulo|jardin|infantil|ninos|ninas|estimulacion|sala cuna/.test(q)) {
+        return "**Atención de Párvulos**: cuidado y estimulación de niños/as de 0 a 6 años, material didáctico y trabajo con familias.\n\n👉 Página: **Atención de Párvulos**.";
+    }
+    if (/agro|agricol|ganad|riego|cultivo|campo|pecuaria/.test(q)) {
+        return "**Agropecuaria**: producción agrícola, manejo pecuario, maquinaria, riego y suelos.\n\n👉 Página: **Agropecuaria**.";
+    }
+    if (/gastro|cocina|chef|culinari|banquete|restaurant|comida|alimento/.test(q)) {
+        return "**Gastronomía (Cocina)**: técnicas culinarias, inocuidad (BPM), cocina nacional e internacional y banquetería.\n\n👉 Página: **Gastronomía**.";
+    }
+    if (/contacto|correo|email|telefono|donde|ubicacion|direccion|san javier/.test(q)) {
+        return "📍 **Liceo Bicentenario Manuel Montt** — San Javier.\n\nRevisa la sección **Contacto** del menú para web oficial, correo y teléfono.";
+    }
+    if (/proyecto|portafolio|trabajos de alumnos|ver proyecto/.test(q)) {
+        return "En **Proyectos** verás trabajos reales de estudiantes. Usa el buscador o el botón *Ver proyectos*.";
+    }
+    if (/sueldo|salario|plata|gana|empleo|trabajo|campo laboral/.test(q)) {
+        return "Cada especialidad tiene su campo laboral y rangos de ingreso. Entra a la página de la especialidad (botón **Ver más**) y revisa *Campo laboral* y *Sueldos*.";
+    }
+    if (/universidad|estudiar despues|continuar|ingenier|pedagogia|carrera superior/.test(q)) {
+        return "Todas las especialidades permiten continuidad de estudios. En cada página dedicada está la lista de **Continuidad de estudios**.";
+    }
+    if (/quien eres|que eres|ayuda|help|que puedes|para que sirves/.test(q)) {
+        return "Soy **JARVIE**, asistente del portafolio del Liceo Manuel Montt. Pregunta por especialidades, proyectos o contacto. Ejemplo: *especialidades* o *¿qué es programación?*";
+    }
+    if (/gracias|thanks|chao|adios|bye|nos vemos/.test(q)) {
+        return "¡De nada! Si necesitas algo más, aquí estaré. 😊";
+    }
+    return "No estoy seguro de eso 🤔 Prueba con **especialidades**, el nombre de una especialidad, **proyectos** o **contacto**.";
+}
+
+function sendMessage() {
+    const chatInput = document.getElementById("chat-input");
+    if (!chatInput) return;
     const userText = chatInput.value.trim();
     if (!userText) return;
 
     appendMessage(userText, "user");
     chatInput.value = "";
 
-    // Bloquear input mientras espera respuesta para evitar doble envío
-    chatInput.disabled = true;
-    if (sendBtn) sendBtn.disabled = true;
-
     const loadingElem = appendMessage("Pensando...", "bot");
 
-    try {
-        const respuesta = await fetch("http://localhost:8000/api/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ mensaje: userText })
-        });
-
-        const data = await respuesta.json();
-
-        if (data.ok) {
-            loadingElem.innerHTML = formatMessageText(data.respuesta);
-        } else {
-            loadingElem.innerHTML = formatMessageText("Error: " + (data.error || "No se obtuvo respuesta"));
-        }
-    } catch (error) {
-        loadingElem.innerHTML = formatMessageText("No pude conectar con el servidor. ¿Está corriendo el backend en localhost:8000?");
-    } finally {
-        chatInput.disabled = false;
-        if (sendBtn) sendBtn.disabled = false;
-        chatInput.focus();
-    }
-
-    const chatMessages = document.getElementById("chat-messages");
-    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+    setTimeout(() => {
+        const reply = getJarvieReply(userText);
+        loadingElem.innerHTML = formatMessageText(reply);
+        const chatMessages = document.getElementById("chat-messages");
+        if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 350);
 }
 
 function appendMessage(text, type) {
