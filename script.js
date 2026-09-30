@@ -416,20 +416,36 @@ function initChatbot() {
     const chatMessages = document.getElementById("chat-messages");
     if (!chatToggle || !chatWindow) return;
 
-    chatToggle.onclick = () => {
-        const isOpen = chatWindow.classList.toggle("active");
-        chatToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-        chatWindow.setAttribute("aria-hidden", isOpen ? "false" : "true");
-        if (isOpen) document.getElementById("chat-input")?.focus();
+    const openChat = () => {
+        chatWindow.classList.add("active");
+        chatWindow.setAttribute("aria-hidden", "false");
+        chatWindow.style.display = "flex";
+        chatToggle.setAttribute("aria-expanded", "true");
+        document.getElementById("chat-input")?.focus();
     };
 
+    const closeChat = () => {
+        chatWindow.classList.remove("active");
+        chatWindow.setAttribute("aria-hidden", "true");
+        chatWindow.style.display = "none";
+        chatToggle.setAttribute("aria-expanded", "false");
+        chatToggle.focus();
+    };
+
+    chatToggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = chatWindow.classList.contains("active") ||
+            chatWindow.getAttribute("aria-hidden") === "false";
+        if (isOpen) closeChat();
+        else openChat();
+    });
+
     if (chatClose) {
-        chatClose.onclick = () => {
-            chatWindow.classList.remove("active");
-            chatToggle.setAttribute("aria-expanded", "false");
-            chatWindow.setAttribute("aria-hidden", "true");
-            chatToggle.focus();
-        };
+        chatClose.addEventListener("click", (e) => {
+            e.preventDefault();
+            closeChat();
+        });
     }
 
     if (chatForm) {
