@@ -9,7 +9,7 @@
    2) Crea una API key
    3) Pégala entre las comillas de abajo
    -------------------------------------------------------------------------- */
-const GEMINI_API_KEY = "AIzaSyAQ.Ab8RN6KlhFXIThs0UxsXQaR6BtX-LDxpRPcLnt8jK8wiFBGTag"; // <-- PEGA TU API KEY AQUÍ
+const GEMINI_API_KEY = "AQ.Ab8RN6KpzaIOLNFPllziDIdqaUI7mxpHPSbfBNrXiMGj6EeNIw"; // <-- PEGA TU API KEY AQUÍ
 
 const JARVIE_SYSTEM = `Eres JARVIE, asistente virtual del Portafolio del Liceo Bicentenario Manuel Montt (San Javier, Chile).
 Responde en español de Chile, claro, amable y breve (máximo 2-3 párrafos cortos).
