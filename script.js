@@ -511,29 +511,50 @@ function getJarvieReplyLocal(text) {
 }
 
 async function getJarvieReplyAI(userText) {
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
+    const models = [
+        "gemini-3.5-flash-lite",
+        "gemini-3.6-flash",
+        "gemini-flash-lite-latest",
+        "gemini-3.5-flash",
+        "gemini-3.8-flash"
+    ];
 
-    const body = {
-        system_instruction: { parts: [{ text: JARVIE_SYSTEM }] },
-        contents: [{ role: "user", parts: [{ text: userText }] }],
-        generationConfig: { temperature: 0.7, maxOutputTokens: 512 }
-    };
-
-    const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-    });
-
-    if (!res.ok) {
-        const errText = await res.text().catch(() => "");
-        throw new Error("Gemini " + res.status + " " + errText.slice(0, 150));
+    let lastError = null;
+    for (const model of models) {
+        const url = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
+        const body = {
+            system_instruction: { parts: [{ text: JARVIE_SYSTEM }] },
+            contents: [{ role: "user", parts: [{ text: userText }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: 512 }
+        };
+        try {
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body)
+            });
+            if (res.status === 503 || res.status === 429) {
+                lastError = new Error(model + " ocupado (" + res.status + ")");
+                continue;
+            }
+            if (!res.ok) {
+                const errText = await res.text().catch(() => "");
+                lastError = new Error(model + " HTTP " + res.status + " " + errText.slice(0, 120));
+                if (res.status === 400 || res.status === 401 || res.status === 403) break;
+                continue;
+            }
+            const data = await res.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!text) {
+                lastError = new Error(model + " respuesta vacía");
+                continue;
+            }
+            return text.trim();
+        } catch (e) {
+            lastError = e;
+        }
     }
-
-    const data = await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) throw new Error("Respuesta vacía");
-    return text.trim();
+    throw lastError || new Error("Ningún modelo disponible");
 }
 
 async function sendMessage() {
@@ -611,3 +632,4 @@ function initFadeInAnimations() {
 
     elements.forEach(el => observer.observe(el));
 }
+```[cite: 1]
