@@ -511,7 +511,7 @@ function getJarvieReplyLocal(text) {
 }
 
 async function getJarvieReplyAI(userText) {
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
 
     const body = {
         system_instruction: { parts: [{ text: JARVIE_SYSTEM }] },
