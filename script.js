@@ -4,6 +4,19 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
+   CONFIGURACIÓN FIREBASE
+   -------------------------------------------------------------------------- */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDMtNL6r8kULTLnvnTfyZydXhhWRScWcmQ",
+  authDomain: "portafolio-lmm.firebaseapp.com",
+  databaseURL: "https://portafolio-lmm-default-rtdb.firebaseio.com",
+  projectId: "portafolio-lmm",
+  storageBucket: "portafolio-lmm.firebasestorage.app",
+  messagingSenderId: "973079046346",
+  appId: "1:973079046346:web:0b45baad3cfe6f51ecac33"
+};
+
+/* --------------------------------------------------------------------------
    CONFIG IA (Gemini gratis)
    1) Entra a https://aistudio.google.com/apikey
    2) Crea una API key
