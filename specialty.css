@@ -34,6 +34,21 @@
   --sidebar-w: 240px;
 }
 
+/* Light theme — sincronizado con index (localStorage lm_theme) */
+[data-theme="light"] {
+  --bg: #f0f5ff;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f5f8ff;
+  --border: rgba(15, 40, 80, 0.10);
+  --border-strong: rgba(15, 40, 80, 0.16);
+  --text: #0f172a;
+  --text-muted: #475569;
+  --text-faint: #94a3b8;
+  --shadow-soft: 0 12px 40px rgba(15, 40, 80, 0.08);
+}
+
+
 *,
 *::before,
 *::after {
@@ -670,3 +685,22 @@ img {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Theme toggle en páginas de especialidad */
+.theme-toggle-spec {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.theme-toggle-spec:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
