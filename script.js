@@ -632,4 +632,3 @@ function initFadeInAnimations() {
 
     elements.forEach(el => observer.observe(el));
 }
-```[cite: 1]
