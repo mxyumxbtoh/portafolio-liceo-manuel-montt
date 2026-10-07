@@ -4,24 +4,24 @@
    ============================================ */
 
 :root {
-  /* Paleta cálida, menos tech-genérica */
-  --bg: #0e0d0b;
-  --bg-elevated: #161411;
-  --bg-card: #1a1814;
-  --bg-card-hover: #211e19;
-  --border: rgba(255, 245, 230, 0.08);
-  --border-strong: rgba(255, 245, 230, 0.14);
+  /* Paleta azul institucional (como las capturas) */
+  --bg: #070b14;
+  --bg-elevated: #0c1220;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2336;
+  --border: rgba(148, 183, 255, 0.10);
+  --border-strong: rgba(148, 183, 255, 0.18);
 
-  --text: #f2ebe0;
-  --text-muted: #a89f90;
-  --text-faint: #6e675c;
+  --text: #eef3ff;
+  --text-muted: #9aadc8;
+  --text-faint: #6b7f9c;
 
-  --accent: #e8a06b;          /* ámbar cálido */
-  --accent-soft: rgba(232, 160, 107, 0.15);
-  --accent-hover: #f0b57f;
+  --accent: #3b82f6;          /* azul brillante */
+  --accent-soft: rgba(59, 130, 246, 0.16);
+  --accent-hover: #60a5fa;
 
-  --secondary: #7d9b8a;       /* verde salvia apagado */
-  --secondary-soft: rgba(125, 155, 138, 0.12);
+  --secondary: #38bdf8;       /* cyan suave */
+  --secondary-soft: rgba(56, 189, 248, 0.12);
 
   --radius-sm: 6px;
   --radius: 12px;
@@ -36,21 +36,21 @@
 
 /* Light theme */
 [data-theme="light"] {
-  --bg: #f7f3ec;
+  --bg: #f0f5ff;
   --bg-elevated: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #faf7f2;
-  --border: rgba(30, 25, 18, 0.1);
-  --border-strong: rgba(30, 25, 18, 0.16);
-  --text: #1c1914;
-  --text-muted: #5c554b;
-  --text-faint: #8a8276;
-  --accent: #c47a3a;
-  --accent-soft: rgba(196, 122, 58, 0.12);
-  --accent-hover: #a8652e;
-  --secondary: #4a6b5c;
-  --secondary-soft: rgba(74, 107, 92, 0.1);
-  --shadow-soft: 0 12px 40px rgba(30, 25, 18, 0.08);
+  --bg-card-hover: #f5f8ff;
+  --border: rgba(15, 40, 80, 0.10);
+  --border-strong: rgba(15, 40, 80, 0.16);
+  --text: #0f172a;
+  --text-muted: #475569;
+  --text-faint: #94a3b8;
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --accent-hover: #1d4ed8;
+  --secondary: #0284c7;
+  --secondary-soft: rgba(2, 132, 199, 0.10);
+  --shadow-soft: 0 12px 40px rgba(15, 40, 80, 0.08);
 }
 
 *,
@@ -125,7 +125,7 @@ button {
   top: -100%;
   left: 1rem;
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
   padding: 0.6rem 1rem;
   z-index: 10000;
   border-radius: var(--radius-sm);
@@ -171,7 +171,7 @@ button {
   width: 36px;
   height: 36px;
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
   font-size: 0.78rem;
   font-weight: 800;
   border-radius: 8px;
@@ -232,7 +232,7 @@ button {
   gap: 0.5rem;
   padding: 0.7rem 1.25rem;
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
   font-weight: 600;
   font-size: 0.9rem;
   border-radius: 999px;
@@ -297,8 +297,8 @@ button {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 70% 20%, rgba(232, 160, 107, 0.07), transparent 60%),
-    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(125, 155, 138, 0.06), transparent 50%);
+    radial-gradient(ellipse 80% 60% at 70% 20%, rgba(59, 130, 246, 0.07), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(56, 189, 248, 0.06), transparent 50%);
   pointer-events: none;
 }
 
@@ -883,7 +883,7 @@ button {
 
 .scroll-top-btn:hover {
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
   border-color: var(--accent);
 }
 
@@ -897,10 +897,10 @@ button {
   display: grid;
   place-items: center;
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
   border-radius: 50%;
   font-size: 1.15rem;
-  box-shadow: 0 6px 20px rgba(232, 160, 107, 0.35);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
   z-index: 95;
   transition: transform 0.2s, background 0.2s;
 }
@@ -1036,7 +1036,7 @@ button {
   display: grid;
   place-items: center;
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
   border-radius: 50%;
   transition: background 0.2s;
 }
@@ -1176,7 +1176,7 @@ button {
   text-transform: uppercase;
   padding: 0.3rem 0.65rem;
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
   border-radius: 4px;
 }
 

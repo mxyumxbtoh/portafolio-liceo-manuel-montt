@@ -4,24 +4,24 @@
    ============================================ */
 
 :root {
-  --bg: #0e0d0b;
-  --bg-elevated: #161411;
-  --bg-card: #1a1814;
-  --bg-card-hover: #211e19;
-  --border: rgba(255, 245, 230, 0.08);
-  --border-strong: rgba(255, 245, 230, 0.14);
+  --bg: #070b14;
+  --bg-elevated: #0c1220;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2336;
+  --border: rgba(148, 183, 255, 0.10);
+  --border-strong: rgba(148, 183, 255, 0.18);
 
-  --text: #f2ebe0;
-  --text-muted: #a89f90;
-  --text-faint: #6e675c;
+  --text: #eef3ff;
+  --text-muted: #9aadc8;
+  --text-faint: #6b7f9c;
 
-  /* Accent por defecto (se sobreescribe por página) */
-  --accent: #e8a06b;
-  --accent-soft: rgba(232, 160, 107, 0.15);
-  --accent-hover: #f0b57f;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59, 130, 246, 0.16);
+  --accent-hover: #60a5fa;
 
-  --secondary: #7d9b8a;
-  --secondary-soft: rgba(125, 155, 138, 0.12);
+  --secondary: #38bdf8;
+  --secondary-soft: rgba(56, 189, 248, 0.12);
+
 
   --radius-sm: 6px;
   --radius: 12px;
@@ -117,7 +117,7 @@ img {
   width: 32px;
   height: 32px;
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
   font-size: 0.7rem;
   font-weight: 800;
   border-radius: 7px;
@@ -568,7 +568,7 @@ img {
 
 .btn-primary {
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
 }
 
 .btn-primary:hover {
@@ -597,7 +597,7 @@ img {
   height: 50px;
   border-radius: 50%;
   background: var(--accent);
-  color: #1a1208;
+  color: #0a1628;
   border: none;
   font-size: 1.15rem;
   z-index: 100;
