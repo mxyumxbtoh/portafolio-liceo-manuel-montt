@@ -16,6 +16,48 @@ const FIREBASE_CONFIG = {
   appId: "1:973079046346:web:0b45baad3cfe6f51ecac33"
 };
 
+let firebaseDb = null;
+let firebaseReady = false;
+
+function initFirebase() {
+    const cfg = FIREBASE_CONFIG;
+    if (!cfg || !cfg.apiKey || !cfg.databaseURL) {
+        console.warn("Firebase no configurado: comentarios solo locales.");
+        return Promise.resolve(false);
+    }
+    return new Promise((resolve) => {
+        if (window.firebase && window.firebase.apps && window.firebase.apps.length) {
+            firebaseDb = firebase.database();
+            firebaseReady = true;
+            resolve(true);
+            return;
+        }
+        const s1 = document.createElement("script");
+        s1.src = "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js";
+        s1.onload = () => {
+            const s2 = document.createElement("script");
+            s2.src = "https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js";
+            s2.onload = () => {
+                try {
+                    firebase.initializeApp(cfg);
+                    firebaseDb = firebase.database();
+                    firebaseReady = true;
+                    resolve(true);
+                } catch (e) {
+                    console.error("Firebase init error:", e);
+                    resolve(false);
+                }
+            };
+            s2.onerror = () => resolve(false);
+            document.head.appendChild(s2);
+        };
+        s1.onerror = () => resolve(false);
+        document.head.appendChild(s1);
+    });
+}
+
+
+
 /* --------------------------------------------------------------------------
    CONFIG IA (Gemini gratis)
    1) Entra a https://aistudio.google.com/apikey
@@ -274,58 +316,91 @@ function initComments() {
     const count = document.getElementById("comment-count");
     if (!form || !list) return;
 
-    const getComments = () => JSON.parse(localStorage.getItem("lm_comments") || "[]");
+    const LOCAL_KEY = "lm_comments";
 
-    const render = () => {
-        const comments = getComments();
+    const getLocal = () => {
+        try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || "[]"); }
+        catch (e) { return []; }
+    };
+    const setLocal = (arr) => localStorage.setItem(LOCAL_KEY, JSON.stringify(arr));
+
+    const render = (comments) => {
         list.innerHTML = "";
-        if (count) count.innerText = comments.length;
-
+        if (count) count.innerText = String(comments.length);
         if (!comments.length) {
-            list.innerHTML = `<p class="no-comments-msg">Sin comentarios aún. Sé el primero.</p>`;
+            list.innerHTML = '<p class="no-comments-msg">Sin comentarios aún. Sé el primero.</p>';
             return;
         }
-
         const fragment = document.createDocumentFragment();
         comments.forEach(c => {
             const item = document.createElement("div");
             item.className = "comment-item";
-            item.innerHTML = `
-                <div class="comment-header">
-                    <strong class="comment-author">${escapeHTML(c.author)}</strong>
-                    <span class="comment-date">${escapeHTML(c.date)}</span>
-                </div>
-                <p class="comment-body">${escapeHTML(c.body)}</p>
-            `;
+            item.innerHTML =
+                '<div class="comment-header">' +
+                '<strong class="comment-author">' + escapeHTML(c.author) + '</strong>' +
+                '<span class="comment-date">' + escapeHTML(c.date || "") + '</span>' +
+                '</div>' +
+                '<p class="comment-body">' + escapeHTML(c.body) + '</p>';
             fragment.appendChild(item);
         });
         list.appendChild(fragment);
     };
 
-    form.addEventListener("submit", (e) => {
+    initFirebase().then((ok) => {
+        if (ok && firebaseDb) {
+            const ref = firebaseDb.ref("comments");
+            ref.limitToLast(100).on("value", (snap) => {
+                const data = snap.val() || {};
+                const comments = Object.keys(data)
+                    .map(k => Object.assign({ id: k }, data[k]))
+                    .sort((a, b) => (b.ts || 0) - (a.ts || 0));
+                render(comments);
+            }, (err) => {
+                console.error("Firebase read error:", err);
+                render(getLocal());
+            });
+        } else {
+            render(getLocal());
+        }
+    });
+
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const authorInput = document.getElementById("comment-author");
         const bodyInput = document.getElementById("comment-body");
-        const author = authorInput.value.trim();
-        const body = bodyInput.value.trim();
+        const author = (authorInput.value || "").trim();
+        const body = (bodyInput.value || "").trim();
         if (!author || !body) return;
 
-        const comments = getComments();
-        comments.unshift({
-            author,
-            body,
+        const entry = {
+            author: author,
+            body: body,
             date: new Date().toLocaleDateString("es-CL", {
                 day: "numeric", month: "short", year: "numeric"
-            })
-        });
-        localStorage.setItem("lm_comments", JSON.stringify(comments));
+            }),
+            ts: Date.now()
+        };
+
+        const local = getLocal();
+        local.unshift(entry);
+        setLocal(local.slice(0, 100));
+
+        if (firebaseReady && firebaseDb) {
+            try {
+                await firebaseDb.ref("comments").push(entry);
+            } catch (err) {
+                console.error("Firebase write error:", err);
+                render(local);
+            }
+        } else {
+            render(local);
+        }
+
         authorInput.value = "";
         bodyInput.value = "";
-        render();
     });
-
-    render();
 }
+
 
 function escapeHTML(str) {
     if (typeof str !== "string") return "";
