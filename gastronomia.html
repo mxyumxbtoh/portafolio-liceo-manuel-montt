@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
+
+  <script>
+    (function () {
+      var t = localStorage.getItem("lm_theme");
+      if (t === "light" || t === "dark") {
+        document.documentElement.setAttribute("data-theme", t);
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Especialidad de Gastronomía (Cocina) | Liceo Manuel Montt</title>
@@ -314,39 +326,96 @@
       .profile-desc { margin: 0 auto; }
       .main { padding: 1.2rem 1rem 4rem; }
     }
-  </style>
+  
+    /* ===== MODO CLARO (sincronizado con index via localStorage lm_theme) ===== */
+    [data-theme="light"] {
+      --bg: #F0F5FF;
+      --surface: #FFFFFF;
+      --surface-2: #F5F8FF;
+      --border: rgba(15, 40, 80, 0.10);
+      --text: #0F172A;
+      --muted: #475569;
+      --shadow: 0 10px 30px rgba(15, 40, 80, 0.08);
+    }
+    [data-theme="light"] body {
+      background: var(--bg) !important;
+      color: var(--text) !important;
+    }
+    [data-theme="light"] .sidebar {
+      background: linear-gradient(180deg, #FFFFFF 0%, #EEF3FF 100%) !important;
+      border-right: 1px solid var(--border) !important;
+    }
+    [data-theme="light"] .sidebar-logo,
+    [data-theme="light"] .nav-list a {
+      color: var(--text);
+    }
+    [data-theme="light"] .nav-list a:hover,
+    [data-theme="light"] .nav-list a.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: #2563eb;
+    }
+    [data-theme="light"] .main {
+      background: var(--bg);
+      color: var(--text);
+    }
+    [data-theme="light"] .card,
+    [data-theme="light"] .profile-card,
+    [data-theme="light"] .stat-box,
+    [data-theme="light"] .salary-item,
+    [data-theme="light"] .level-item,
+    [data-theme="light"] .cta-bar,
+    [data-theme="light"] .jefe-row,
+    [data-theme="light"] .note {
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+    [data-theme="light"] .card p,
+    [data-theme="light"] .profile-desc,
+    [data-theme="light"] .role,
+    [data-theme="light"] .label,
+    [data-theme="light"] .list-clean li,
+    [data-theme="light"] .muted {
+      color: var(--muted);
+    }
+    [data-theme="light"] h1,
+    [data-theme="light"] h2,
+    [data-theme="light"] h3,
+    [data-theme="light"] .card-title {
+      color: var(--text);
+    }
+    [data-theme="light"] .back-btn {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    [data-theme="light"] .theme-toggle-spec {
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
+      color: #d97706 !important; /* sol dorado en modo día */
+    }
+    [data-theme="light"] .sidebar-footer {
+      color: var(--muted);
+      border-top-color: var(--border);
+    }
+    
+    .theme-toggle-spec {
+      width: 40px !important;
+      height: 40px !important;
+      border-radius: 50% !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      display: inline-grid !important;
+      place-items: center !important;
+    }
+    .theme-toggle-spec i {
+      font-size: 1rem;
+      line-height: 1;
+    }
+</style>
 
-  <script>
-    (function () {
-      var KEY = "lm_theme";
-      var html = document.documentElement;
-      var saved = localStorage.getItem(KEY);
-      if (saved === "light" || saved === "dark") {
-        html.setAttribute("data-theme", saved);
-      } else {
-        html.setAttribute("data-theme", "dark");
-      }
-      function updateIcon(btn) {
-        if (!btn) return;
-        var isLight = html.getAttribute("data-theme") === "light";
-        btn.innerHTML = isLight
-          ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
-          : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
-      }
-      document.addEventListener("DOMContentLoaded", function () {
-        var btn = document.getElementById("theme-toggle-spec");
-        updateIcon(btn);
-        if (btn) {
-          btn.addEventListener("click", function () {
-            var next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
-            html.setAttribute("data-theme", next);
-            localStorage.setItem(KEY, next);
-            updateIcon(btn);
-          });
-        }
-      });
-    })();
-  </script>
+  
 </head>
 <body>
   <div class="app">
@@ -377,7 +446,7 @@
 
     <main class="main">
       <div class="topbar">
-      <button type="button" class="theme-toggle-spec" id="theme-toggle-spec" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+      <button type="button" class="theme-toggle-spec" id="theme-toggle-spec" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro" style="width:40px;height:40px;min-width:40px;min-height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface,#121A2B);color:var(--text,#F1F5F9);display:inline-grid;place-items:center;cursor:pointer;padding:0;overflow:hidden;line-height:1;flex-shrink:0;"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
 
         <h1>Gastronomía <span>(Cocina)</span></h1>
         <a href="index.html#especialidades" class="back-btn">
@@ -559,5 +628,36 @@
       });
     });
   </script>
+
+  <script>
+    (function () {
+      var KEY = "lm_theme";
+      var html = document.documentElement;
+      function iconFor(theme) {
+        // En modo día = sol; en modo noche = luna
+        return theme === "light"
+          ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
+          : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
+      }
+      function apply(theme) {
+        html.setAttribute("data-theme", theme);
+        localStorage.setItem(KEY, theme);
+        var btn = document.getElementById("theme-toggle-spec");
+        if (btn) btn.innerHTML = iconFor(theme);
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        var current = html.getAttribute("data-theme") || "dark";
+        apply(current);
+        var btn = document.getElementById("theme-toggle-spec");
+        if (btn) {
+          btn.addEventListener("click", function () {
+            var next = (html.getAttribute("data-theme") === "dark") ? "light" : "dark";
+            apply(next);
+          });
+        }
+      });
+    })();
+  </script>
+
 </body>
 </html>
