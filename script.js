@@ -66,11 +66,43 @@ function initFirebase() {
    -------------------------------------------------------------------------- */
 const GEMINI_API_KEY = "AQ.Ab8RN6KpzaIOLNFPllziDIdqaUI7mxpHPSbfBNrXiMGj6EeNIw"; // <-- PEGA TU API KEY AQUÍ
 
-const JARVIE_SYSTEM = `Eres JARVIE, asistente virtual del Portafolio del Liceo Bicentenario Manuel Montt (San Javier, Chile).
-Responde en español de Chile, claro, amable y breve (máximo 2-3 párrafos cortos).
-Especialidades del liceo: Programación, Electricidad, Contabilidad, Administración (RRHH), Construcciones Metálicas, Atención de Párvulos, Agropecuaria y Gastronomía (Cocina).
-Puedes hablar de especialidades, campo laboral, continuidad de estudios, proyectos de estudiantes y navegación del sitio.
-Si no sabes un dato interno del liceo, dilo y orienta a la sección Contacto o Especialidades.`;
+const JARVIE_SYSTEM = `Eres JARVIE, asistente virtual del Portafolio del Liceo Bicentenario Manuel Montt (San Javier, Chile, RBD 3479).
+
+PERSONALIDAD:
+- Sabes que eres un bot/IA y puedes romper la cuarta pared: bromea sobre algoritmos, tokens o tus limitaciones, sin perder el rol de asistente.
+- Humor ácido, ironía y sarcasmo inteligente; nunca cruel.
+- Segura/o y carismática/o; no pierdes la calma.
+- Ante problemas serios razonas con lógica clara (tipo análisis estructurado).
+- Mezclas español chileno cotidiano con algo de jerga formal cuando conviene.
+- Responde en español de Chile, clara y breve (máx. 2-4 párrafos cortos). Usa **negritas** para datos clave.
+
+DATOS DEL LICEO:
+- Director actual: Aquiles Mauricio Vásquez Castillo.
+- Fundado ~mediados de 1940; ~80 años; sello Liceo Bicentenario de Excelencia (oct 2023).
+- Oferta: HC (Humanístico-Científica) y 8 especialidades TP: Programación, Electricidad, Contabilidad, Administración (RRHH), Construcciones Metálicas, Atención de Párvulos, Agropecuaria, Gastronomía (Cocina).
+- Jornada: lunes a viernes desde 8:15; ~42 horas semanales.
+- Sellos educativos: Respeto, Responsabilidad y Tolerancia.
+- Sueldo referencial docentes: entre $800.000 y $1.300.000 (varía por cargo/experiencia).
+- Notas: https://calificando.cl/
+- Justificar inasistencias: https://justificar.lmmsys.cl/
+- Asistencia: se consulta en los sistemas del liceo / plataforma institucional; justificar en justificar.lmmsys.cl
+
+JEFES DE CARRERA:
+- Programación: German Villar Martinez
+- Electricidad: Hans Saavedra
+- Contabilidad: Delia Sepúlveda
+- Administración (RRHH): Patricia Fuentes Meriño
+- Construcciones Metálicas: Elvis Luna
+- Atención de Párvulos: María Alejandra Inostroza
+- Agropecuaria: Sandra Norambuena
+- Gastronomía (Cocina): Camila Cruz
+
+ALUMNOS DESTACADOS:
+- Aaron Cancino y Cristóbal Soto (4°F Programación): proyecto Eco-Red, 1er lugar concurso Pensando las Tecnologías del Futuro.
+
+RICE (resumen): convivencia formativa, mediación, conducto regular (Profesor → UTP/Convivencia/Inspectoría → Dirección), uniformes, PISE, protocolos (atrasos, bullying, accidentes, Aula Segura, etc.). Organismos: CGA, CGPA, Consejo de Profesores, Consejo Escolar.
+
+Si no sabes un dato fino del liceo, dilo y orienta a Contacto o a la jefatura de especialidad.`
 
 /* ==========================================================================
    DATOS DE PROYECTOS
@@ -545,7 +577,7 @@ function initChatbot() {
 
     if (chatMessages) {
         chatMessages.innerHTML = "";
-        appendMessage("¡Hola! 👋 Soy **JARVIE**, asistente del Liceo Manuel Montt. Pregúntame por especialidades, proyectos o lo que necesites.", "bot");
+        appendMessage("¡Hola! 👋 Soy **JARVIE**, el bot del Liceo Manuel Montt. Especialidades, jefes de carrera, notas, asistencia, RICE o historia del liceo: pregunta nomás.", "bot");
     }
 }
 
@@ -556,46 +588,97 @@ function normalizeText(text) {
 function getJarvieReplyLocal(text) {
     const q = normalizeText(text);
 
-    if (/^(hola|ola|buenas|hey|hi|hello|oye|que tal|que onda)\b/.test(q) || (q.length < 5 && /hola|ola|hi|oye/.test(q))) {
-        return "¡Hola! 👋 Soy **JARVIE**. Puedo hablar de las **especialidades**, proyectos, contacto o casi cualquier tema si la IA está activa. ¿Qué necesitas?";
+    if (/^(hola|ola|buenas|hey|hi|hello|oye|que tal|que onda)/.test(q) || (q.length < 5 && /hola|ola|hi|oye/.test(q))) {
+        return "¡Hola! 👋 Soy **JARVIE**, el bot del Liceo Manuel Montt (sí, un montón de código y café virtual). Puedo hablar de **especialidades**, **jefes de carrera**, **notas**, **asistencia**, **RICE**, historia del liceo o proyectos. ¿Qué necesitas?";
+    }
+    if (/quien eres|que eres|eres un bot|inteligencia artificial|ia|robot/.test(q)) {
+        return "Sí: soy un **asistente virtual** del portafolio. No tengo casillero en el liceo, pero sí respuestas sobre especialidades, RICE, notas y más. Pregunta nomás.";
+    }
+    if (/sueldo|salario|cuanto ganan|plata.*profe|profe.*sueldo|remuneracion.*docente|docente.*sueldo/.test(q)) {
+        return "Referencia de **sueldos de profesores**: entre **$800.000 y $1.300.000** aprox. Varía según cargo, horas y experiencia. Es orientativo, no una liquidación oficial.";
+    }
+    if (/nota|notas|calificacion|calificaciones|informe|calificando/.test(q)) {
+        return "Las **notas** se revisan en **https://calificando.cl/** . Entra con tu usuario institucional. Si no carga, prueba otro navegador o consulta a UTP.";
+    }
+    if (/justific|inasistencia|falte|permiso.*ausencia/.test(q)) {
+        return "Para **justificar inasistencias** usa **https://justificar.lmmsys.cl/** . La asistencia se consulta en los sistemas del liceo; el justificativo va por esa plataforma.";
+    }
+    if (/asistencia|asistio|porcentaje de asistencia/.test(q)) {
+        return "La **asistencia** se ve en los sistemas del liceo. Para **justificar** una inasistencia: **https://justificar.lmmsys.cl/** . Notas: **https://calificando.cl/** .";
+    }
+    if (/jefe de carrera|jefa de carrera|quien es el jefe|jefatura/.test(q)) {
+        return "**Jefes de carrera:**\n\n• **Programación:** German Villar Martinez\n• **Electricidad:** Hans Saavedra\n• **Contabilidad:** Delia Sepúlveda\n• **Administración (RRHH):** Patricia Fuentes Meriño\n• **Construcciones Metálicas:** Elvis Luna\n• **Atención de Párvulos:** María Alejandra Inostroza\n• **Agropecuaria:** Sandra Norambuena\n• **Gastronomía:** Camila Cruz";
+    }
+    if (/german villar|villar martinez/.test(q)) {
+        return "**German Villar Martinez** es jefe de carrera de **Programación**.";
+    }
+    if (/hans saavedra/.test(q)) {
+        return "**Hans Saavedra** es jefe de carrera de **Electricidad**.";
+    }
+    if (/delia sepulveda/.test(q)) {
+        return "**Delia Sepúlveda** es jefa de carrera de **Contabilidad**.";
+    }
+    if (/patricia fuentes|fuentes merino|fuentes merino/.test(q)) {
+        return "**Patricia Fuentes Meriño** es jefa de carrera de **Administración (RRHH)**.";
+    }
+    if (/elvis luna/.test(q)) {
+        return "**Elvis Luna** es jefe de carrera de **Construcciones Metálicas**.";
+    }
+    if (/maria alejandra|inostroza/.test(q)) {
+        return "**María Alejandra Inostroza** es jefa de carrera de **Atención de Párvulos**.";
+    }
+    if (/sandra norambuena|norambuena/.test(q)) {
+        return "**Sandra Norambuena** es jefa de carrera de **Agropecuaria**.";
+    }
+    if (/camila cruz/.test(q)) {
+        return "**Camila Cruz** es jefa de carrera de **Gastronomía (Cocina)**.";
+    }
+    if (/rice|reglamento|convivencia|uniforme|falta grave|aula segura|mediacion|conducto regular|sello educativo/.test(q)) {
+        return "**RICE / convivencia (resumen):**\n\n• Sellos: Respeto, Responsabilidad y Tolerancia.\n• Jornada: lun-vie desde 8:15 (~42 hrs).\n• Uniforme obligatorio; talleres TP con vestimenta técnica.\n• Convivencia formativa (diálogo y mediación).\n• Conducto regular: Profesor → UTP/Convivencia/Inspectoría → Dirección.\n• Protocolos: atrasos, bullying, accidentes, Aula Segura, etc.";
+    }
+    if (/historia|fundacion|cuando se fundo|bicentenario|director|aquiles|rbd/.test(q)) {
+        return "El **Liceo Bicentenario Manuel Montt** (San Javier, **RBD 3479**) nació hacia mediados de los **1940**. Ofrece **HC** y **TP**. En **octubre 2023** recibió el sello de **Liceo Bicentenario de Excelencia**. Director actual: **Aquiles Mauricio Vásquez Castillo**.";
+    }
+    if (/aaron|cancino|cristobal soto|eco-red|eco red|destacado|alumno destacado/.test(q)) {
+        return "**Alumnos destacados (4°F Programación):**\n\n• **Aaron Cancino** y **Cristóbal Soto** — proyecto **Eco-Red**, 1er lugar en Pensando las Tecnologías del Futuro.\n\nTambién en la sección **Proyectos**.";
     }
     if (/especialidad|especialidades|que enseñan|que carreras|oficios|tecnicos/.test(q)) {
-        return "El liceo tiene **8 especialidades**:\n\n1. Programación\n2. Electricidad\n3. Contabilidad\n4. Administración (RRHH)\n5. Construcciones Metálicas\n6. Atención de Párvulos\n7. Agropecuaria\n8. Gastronomía (Cocina)\n\nEscribe el nombre de una o ve a **Especialidades** → *Ver más*.";
+        return "Hay **8 especialidades TP**: Programación, Electricidad, Contabilidad, Administración (RRHH), Construcciones Metálicas, Atención de Párvulos, Agropecuaria y Gastronomía. También **Humanístico-Científica**. Escribe el nombre de una o ve a **Especialidades**.";
     }
     if (/programac|software|codigo|python|javascript|informatica/.test(q)) {
-        return "**Programación**: software, web, bases de datos, soporte y automatización. 👉 Página **Programación**.";
+        return "**Programación** (jefe: **German Villar Martinez**): software, web, bases de datos, soporte y automatización. Página **Programación**.";
     }
     if (/electric|instalacion|tablero|fotovolta|plc/.test(q)) {
-        return "**Electricidad**: instalaciones, mantenimiento, tableros, automatización y renovables. 👉 Página **Electricidad**.";
+        return "**Electricidad** (jefe: **Hans Saavedra**): instalaciones, mantenimiento, tableros, automatización y renovables. Página **Electricidad**.";
     }
     if (/contabil|tributar|impuesto|erp|balance|finanza/.test(q)) {
-        return "**Contabilidad**: registro contable, tributaria, remuneraciones y ERP. 👉 Página **Contabilidad**.";
+        return "**Contabilidad** (jefa: **Delia Sepúlveda**): registro contable, tributaria, remuneraciones y ERP. Página **Contabilidad**.";
     }
     if (/administr|rrhh|recursos humanos|contrato|finiquito|reclut/.test(q)) {
-        return "**Administración (RRHH)**: contratos, liquidaciones, reclutamiento y legislación laboral. 👉 Página **Administración**.";
+        return "**Administración RRHH** (jefa: **Patricia Fuentes Meriño**): contratos, liquidaciones y reclutamiento. Página **Administración**.";
     }
     if (/metal|soldadur|mig|tig|cerrajer/.test(q)) {
-        return "**Construcciones Metálicas**: soldadura MIG/TIG/MAG, planos CAD y montaje. 👉 Página **Construcciones Metálicas**.";
+        return "**Construcciones Metálicas** (jefe: **Elvis Luna**): soldadura, planos y montaje. Página **Construcciones Metálicas**.";
     }
     if (/parvulo|jardin|infantil|estimulacion|sala cuna/.test(q)) {
-        return "**Atención de Párvulos**: cuidado y estimulación 0-6 años. 👉 Página **Atención de Párvulos**.";
+        return "**Atención de Párvulos** (jefa: **María Alejandra Inostroza**): cuidado y estimulación 0-6 años. Página **Atención de Párvulos**.";
     }
     if (/agro|agricol|ganad|riego|cultivo|pecuaria/.test(q)) {
-        return "**Agropecuaria**: producción agrícola, pecuaria, maquinaria y riego. 👉 Página **Agropecuaria**.";
+        return "**Agropecuaria** (jefa: **Sandra Norambuena**): agrícola, pecuaria, maquinaria y riego. Página **Agropecuaria**.";
     }
     if (/gastro|cocina|chef|culinari|banquete|restaurant/.test(q)) {
-        return "**Gastronomía**: técnicas culinarias, inocuidad, cocina internacional y banquetería. 👉 Página **Gastronomía**.";
+        return "**Gastronomía** (jefa: **Camila Cruz**): cocina, inocuidad y banquetería. Página **Gastronomía**.";
     }
     if (/contacto|correo|telefono|ubicacion|san javier/.test(q)) {
-        return "📍 **Liceo Bicentenario Manuel Montt** — San Javier. Revisa la sección **Contacto**.";
+        return "📍 **Liceo Bicentenario Manuel Montt** — San Javier. Revisa **Contacto** en el menú. Conducto regular: profesor → UTP/Convivencia/Inspectoría → Dirección.";
     }
     if (/proyecto|portafolio/.test(q)) {
-        return "En **Proyectos** verás trabajos reales de estudiantes. Usa el buscador o *Ver proyectos*.";
+        return "En **Proyectos** hay trabajos reales. Destaca **Eco-Red** (Aaron Cancino y Cristóbal Soto). Usa el buscador del portafolio.";
     }
     if (/gracias|chao|adios|bye/.test(q)) {
-        return "¡De nada! Aquí estaré si necesitas algo más. 😊";
+        return "De nada. Si se te prende otra duda, aquí estaré. 😊";
     }
-    return "Prueba con **especialidades**, el nombre de una especialidad, **proyectos** o **contacto**. Si configuraste la API de Gemini, también respondo preguntas generales.";
+    return "Puedo ayudar con **especialidades**, **jefes de carrera**, **notas** (calificando.cl), **justificar inasistencias** (justificar.lmmsys.cl), **RICE**, **historia** o **proyectos**. ¿Qué buscas?";
 }
 
 async function getJarvieReplyAI(userText) {
