@@ -254,7 +254,7 @@ function renderProjects(projects) {
     grid.innerHTML = "";
 
     if (!projects.length) {
-        grid.innerHTML = `<p class="no-projects-msg">No se encontraron proyectos.</p>`;
+        grid.innerHTML = `<p class="no-projects-msg">No hay proyectos que coincidan con tu búsqueda. Prueba con otra palabra (ej. Programación, Eco-Red, drones).</p>`;
         return;
     }
 
@@ -305,32 +305,94 @@ function initSearch() {
     const clearBtn = document.getElementById("clear-search");
     if (!input) return;
 
-    input.addEventListener("input", (e) => {
-        const q = e.target.value.toLowerCase().trim();
-        if (clearBtn) clearBtn.style.display = q ? "block" : "none";
+    let statusEl = document.getElementById("search-status");
+    if (!statusEl) {
+        statusEl = document.createElement("p");
+        statusEl.id = "search-status";
+        statusEl.className = "search-status";
+        statusEl.setAttribute("aria-live", "polite");
+        statusEl.style.cssText = "text-align:center;margin:0.75rem auto 0;max-width:520px;font-size:0.9rem;color:var(--text-muted,#94a3b8);min-height:1.25em;";
+        const box = input.closest(".search-box") || input.parentElement;
+        if (box && box.parentElement) {
+            box.parentElement.insertBefore(statusEl, box.nextSibling);
+        }
+    }
 
-        const filtered = projectsData.filter(p =>
-            p.title.toLowerCase().includes(q) ||
-            p.student.toLowerCase().includes(q) ||
-            p.specialty.toLowerCase().includes(q) ||
-            p.techs.some(t => t.toLowerCase().includes(q))
-        );
-        renderProjects(filtered);
+    const normalize = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    const filterSpecialtyCards = (q) => {
+        const cards = document.querySelectorAll(".specialty-card");
+        let visible = 0;
+        cards.forEach((card) => {
+            const hay = normalize(card.innerText);
+            const match = !q || hay.includes(q);
+            card.style.display = match ? "" : "none";
+            if (match) visible++;
+        });
+        return visible;
+    };
+
+    const runSearch = () => {
+        const raw = input.value.trim();
+        const q = normalize(raw);
+
+        if (clearBtn) clearBtn.style.display = raw ? "block" : "none";
+
+        const filteredProjects = !q
+            ? projectsData
+            : projectsData.filter((p) => {
+                const blob = normalize(
+                    [p.title, p.student, p.specialty, p.description, (p.techs || []).join(" "), p.year || ""].join(" ")
+                );
+                return blob.includes(q);
+            });
+        renderProjects(filteredProjects);
+
+        const specsVisible = filterSpecialtyCards(q);
+
+        if (!q) {
+            statusEl.textContent = "";
+            return;
+        }
+
+        const pLabel = filteredProjects.length === 1 ? " proyecto" : " proyectos";
+        const sLabel = specsVisible === 1 ? " especialidad" : " especialidades";
+        statusEl.textContent = "Resultados: " + filteredProjects.length + pLabel + " · " + specsVisible + sLabel;
+
+        if (filteredProjects.length > 0) {
+            document.getElementById("proyectos")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else if (specsVisible > 0) {
+            document.getElementById("especialidades")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    };
+
+    let timer = null;
+    input.addEventListener("input", () => {
+        clearTimeout(timer);
+        timer = setTimeout(runSearch, 180);
+    });
+
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            clearTimeout(timer);
+            runSearch();
+        }
     });
 
     if (clearBtn) {
         clearBtn.addEventListener("click", () => {
             input.value = "";
             clearBtn.style.display = "none";
+            statusEl.textContent = "";
+            filterSpecialtyCards("");
             renderProjects(projectsData);
             input.focus();
         });
     }
 }
 
-/* ==========================================================================
-   5. COMENTARIOS
-   ========================================================================== */
+
 function initComments() {
     const form = document.getElementById("comment-form");
     const list = document.getElementById("comments-list");
