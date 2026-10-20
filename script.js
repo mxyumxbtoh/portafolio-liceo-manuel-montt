@@ -72,7 +72,8 @@ const JARVIE_KB = {
     justificar_msg: "Puedes **justificar inasistencias** en la plataforma oficial: **https://justificar.lmmsys.cl/** . Yo no justifico por ti; el trámite lo haces ahí."
   },
   sueldos: "Rango **referencial** de sueldos de profesores: entre **$800.000 y $1.300.000** CLP. No es un monto fijo: varía por experiencia, horas, asignaciones y funciones.",
-  jefesLista: "**Jefes de carrera (no son profesor jefe ni director):**\n\n• **Programación:** German Villar Martinez\n• **Electricidad:** Hans Saavedra\n• **Contabilidad:** Delia Sepúlveda\n• **Administración (RRHH):** Patricia Fuentes Meriño\n• **Construcciones Metálicas:** Elvis Luna\n• **Atención de Párvulos:** María Alejandra Inostroza\n• **Agropecuaria:** Sandra Norambuena\n• **Gastronomía (Cocina):** Camila Cruz",
+  directivos: "**Equipo directivo y de gestión — Liceo Bicentenario Manuel Montt:**\n\n• **Aquiles Vásquez** — Director LMM\n• **Eduardo Molina** — Subdirector\n• **Augusto Astudillo** — Inspector General\n• **Bessy Rodríguez** — Inspectoría General\n• **José Pinto** — Inspectoría General\n• **Francisco Quiroz** — Inspectoría General\n• **Fernanda Bravo** — Jefa U.T.P. (Unidad Técnico Pedagógica)\n• **Sandra Andaur** — Jefa U.T.P.\n• **Gregorio Sepúlveda** — Coordinador Téc. Profesional\n• **Hans Saavedra** — Coordinador Área Industrial (también jefe de carrera de **Electricidad**)\n• **Luis González** — Departamento Orientación\n• **Ricardo Ríos** — Convivencia Escolar\n• **Soledad López** — Jefa Psicosocial LMM\n• **María Inés Sepúlveda** — Evaluadora",
+  jefesLista: "**Jefes de carrera (no son profesor jefe ni director):**\n\n• **Programación:** German Villar Martinez\n• **Electricidad:** Hans Saavedra\n• **Contabilidad:** Delia Sepúlveda\n• **Administración (RRHH):** Patricia Fuentes Meriño\n• **Construcciones Metálicas:** Elvis Luna\n• **Atención de Párvulos:** María Alejandra Inostroza\n• **Agropecuaria:** Sandra Norambuena\n• **Gastronomía (Cocina):** Karina Soto",
   rice: "**RICE (resumen):**\n\n• **Sellos:** Respeto, Responsabilidad y Tolerancia.\n• **Jornada:** lunes a viernes desde **08:15**, carga ~**42 horas**.\n• **Uniforme** obligatorio; en talleres TP vestimenta técnica.\n• Convivencia **formativa** (diálogo, mediación).\n• **Conducto regular:** Profesor Jefe/Asignatura → UTP / Convivencia / Inspectoría → Dirección.\n• Protocolos: atrasos, bullying, accidentes, Aula Segura (Ley 21.128), etc.\n\nAnte un caso concreto, acude a la autoridad correspondiente.",
   historia: "El **Liceo Bicentenario Manuel Montt** de San Javier (**RBD 3479**) es un liceo público del Maule (HC y TP). Se fundó hacia mediados de los **1940**. En **octubre 2023** recibió el sello **Liceo Bicentenario de Excelencia**. Director actual: **Aquiles Mauricio Vásquez Castillo**.",
   logros: "Logros: sello **Liceo Bicentenario de Excelencia (2023)**; avances en **SIMCE**; articulación para continuidad de estudios; reconocimiento comunal de San Javier.",
@@ -88,9 +89,9 @@ const JARVIE_SYSTEM = `Eres JARVIE, asistente virtual del Portafolio del Liceo B
 Sabes que eres un bot; humor ocasional, nunca cruel. Prioriza datos correctos. Español de Chile, breve. Usa **negritas**.
 NO inventes. Notas: https://calificando.cl/ | Justificar: https://justificar.lmmsys.cl/
 Sueldos docentes referencial: $800.000-$1.300.000.
-Jefes: Programación German Villar Martinez; Electricidad Hans Saavedra; Contabilidad Delia Sepúlveda; Administración Patricia Fuentes Meriño; Construcciones Metálicas Elvis Luna; Párvulos María Alejandra Inostroza; Agropecuaria Sandra Norambuena; Gastronomía Camila Cruz.
+Jefes: Programación German Villar Martinez; Electricidad Hans Saavedra; Contabilidad Delia Sepúlveda; Administración Patricia Fuentes Meriño; Construcciones Metálicas Elvis Luna; Párvulos María Alejandra Inostroza; Agropecuaria Sandra Norambuena; Gastronomía Karina Soto.
 RICE: sellos Respeto/Responsabilidad/Tolerancia; jornada 08:15; conducto Profesor→UTP/Convivencia/Inspectoría→Dirección.
-Historia: ~1940; Bicentenario Excelencia 2023; director Aquiles Mauricio Vásquez Castillo.
+Historia: ~1940; Bicentenario Excelencia 2023; director Aquiles Vásquez. Equipo: Subdirector Eduardo Molina; Inspectoría (Astudillo, Rodríguez, Pinto, Quiroz); UTP Fernanda Bravo y Sandra Andaur; Coord. TP Gregorio Sepúlveda; Coord. Industrial / jefe Electricidad Hans Saavedra; Orientación Luis González; Convivencia Ricardo Ríos; Psicosocial Soledad López; Evaluadora María Inés Sepúlveda.
 Destacados: Aaron Cancino y Cristóbal Soto (Eco-Red, 1er lugar).`;
 
 /* ==========================================================================
@@ -144,48 +145,138 @@ document.addEventListener("DOMContentLoaded", () => {
    1. NAVBAR
    ========================================================================== */
 function initNavbar() {
-    const hamburger = document.getElementById("hamburger");
-    const navMenu = document.getElementById("nav-menu");
+    const toggle = document.getElementById("menu-toggle") || document.getElementById("hamburger");
+    const panel = document.getElementById("menu-panel") || document.getElementById("side-drawer");
+    const backdrop = document.getElementById("menu-backdrop") || document.getElementById("drawer-overlay");
+    const closeBtn = document.getElementById("menu-close") || document.getElementById("drawer-close");
 
-    if (hamburger && navMenu) {
-        hamburger.addEventListener("click", () => {
-            const isOpen = navMenu.classList.toggle("open");
-            hamburger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    if (!toggle || !panel) return;
+
+    let lastFocus = null;
+
+    const isOpen = () => panel.classList.contains("is-open") || panel.classList.contains("open");
+
+    const openMenu = () => {
+        lastFocus = document.activeElement;
+        panel.classList.add("is-open", "open");
+        panel.setAttribute("aria-hidden", "false");
+        toggle.setAttribute("aria-expanded", "true");
+        if (backdrop) {
+            backdrop.hidden = false;
+            backdrop.classList.add("is-open", "open");
+        }
+        document.body.classList.add("menu-open", "drawer-open");
+        const focusable = panel.querySelector("button, a");
+        if (focusable) focusable.focus({ preventScroll: true });
+    };
+
+    const closeMenu = () => {
+        panel.classList.remove("is-open", "open");
+        panel.setAttribute("aria-hidden", "true");
+        toggle.setAttribute("aria-expanded", "false");
+        if (backdrop) {
+            backdrop.classList.remove("is-open", "open");
+            setTimeout(() => { backdrop.hidden = true; }, 300);
+        }
+        document.body.classList.remove("menu-open", "drawer-open");
+        if (lastFocus && typeof lastFocus.focus === "function") {
+            try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
+        }
+    };
+
+    toggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (isOpen()) closeMenu();
+        else openMenu();
+    });
+
+    if (closeBtn) closeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        closeMenu();
+    });
+
+    if (backdrop) backdrop.addEventListener("click", closeMenu);
+
+    panel.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => closeMenu());
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && isOpen()) {
+            e.preventDefault();
+            closeMenu();
+        }
+    });
+
+    // Active link on scroll (index sections)
+    const sectionIds = ["inicio", "especialidades", "proyectos", "comentarios", "creditos", "contacto"];
+    const links = document.querySelectorAll(".nav-link");
+    if (links.length && "IntersectionObserver" in window) {
+        const map = {};
+        links.forEach((a) => {
+            const href = a.getAttribute("href") || "";
+            const id = href.replace(/^.*#/, "");
+            if (id) map[id] = a;
+        });
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                const id = entry.target.id;
+                links.forEach((l) => l.classList.remove("active"));
+                if (map[id]) map[id].classList.add("active");
+            });
+        }, { rootMargin: "-40% 0px -50% 0px", threshold: 0 });
+        sectionIds.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) obs.observe(el);
         });
     }
-
-    document.querySelectorAll(".nav-link").forEach(link => {
-        link.addEventListener("click", () => {
-            navMenu?.classList.remove("open");
-            hamburger?.setAttribute("aria-expanded", "false");
-        });
-    });
 }
 
-/* ==========================================================================
-   2. TEMA CLARO / OSCURO
-   ========================================================================== */
 function initThemeToggle() {
-    const toggleBtn = document.getElementById("theme-toggle");
     const html = document.documentElement;
-    if (!toggleBtn) return;
+    const KEY = "lm_theme";
 
-    const saved = localStorage.getItem("lm_theme");
-    if (saved === "light" || saved === "dark") {
-        html.setAttribute("data-theme", saved);
-        toggleBtn.innerHTML = saved === "light"
+    const buttons = () =>
+        Array.from(document.querySelectorAll("#theme-toggle, #theme-toggle-spec, .theme-toggle, .theme-toggle-spec"));
+
+    const iconFor = (theme) =>
+        theme === "light"
             ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
             : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
+
+    const current = () => {
+        const t = html.getAttribute("data-theme");
+        return t === "light" ? "light" : "dark";
+    };
+
+    const apply = (theme) => {
+        html.setAttribute("data-theme", theme);
+        try { localStorage.setItem(KEY, theme); } catch (e) {}
+        buttons().forEach((btn) => {
+            btn.innerHTML = iconFor(theme);
+            btn.setAttribute("aria-label", theme === "light" ? "Cambiar a modo oscuro" : "Cambiar a modo claro");
+            btn.title = theme === "light" ? "Modo noche" : "Modo día";
+        });
+    };
+
+    // Cargar preferencia guardada
+    let saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    if (saved === "light" || saved === "dark") {
+        apply(saved);
+    } else {
+        apply(current());
     }
 
-    toggleBtn.addEventListener("click", () => {
-        const isDark = html.getAttribute("data-theme") !== "light";
-        const next = isDark ? "light" : "dark";
-        html.setAttribute("data-theme", next);
-        localStorage.setItem("lm_theme", next);
-        toggleBtn.innerHTML = next === "light"
-            ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
-            : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
+    // Un solo handler delegado (funciona aunque se clonene botones)
+    document.addEventListener("click", (e) => {
+        const btn = e.target.closest("#theme-toggle, #theme-toggle-spec, .theme-toggle, .theme-toggle-spec");
+        if (!btn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        apply(current() === "light" ? "dark" : "light");
     });
 }
 
@@ -643,7 +734,7 @@ function matchJefeCarrera(q) {
         [/metal|soldadur/, "Construcciones Metálicas", "Elvis Luna"],
         [/parvulo|jardin infantil/, "Atención de Párvulos", "María Alejandra Inostroza"],
         [/agro|pecuaria|agricol/, "Agropecuaria", "Sandra Norambuena"],
-        [/gastro|cocina/, "Gastronomía (Cocina)", "Camila Cruz"]
+        [/gastro|cocina/, "Gastronomía (Cocina)", "Karina Soto"]
     ];
     for (const [re, esp, nombre] of pairs) {
         if (re.test(q)) {
@@ -680,13 +771,29 @@ function getJarvieReplyLocal(text) {
         return JARVIE_KB.jefesLista;
     }
     if (/german villar|villar martinez/.test(q)) return "**German Villar Martinez** es jefe de carrera de **Programación**.";
-    if (/hans saavedra/.test(q)) return "**Hans Saavedra** es jefe de carrera de **Electricidad**.";
+    if (/hans saavedra/.test(q)) return "**Hans Saavedra** es **jefe de carrera de Electricidad** y también **Coordinador del Área Industrial** del liceo.";
+    if (/aquiles|vasquez|vásquez/.test(q) && /director|quien/.test(q) || /^quien es el director|director del liceo|director lmm/.test(q))
+        return "**Aquiles Vásquez** es el **Director** del Liceo Bicentenario Manuel Montt (LMM).";
+    if (/eduardo molina|subdirector/.test(q)) return "**Eduardo Molina** es el **Subdirector** del LMM.";
+    if (/augusto astudillo/.test(q)) return "**Augusto Astudillo** integra **Inspectoría General**.";
+    if (/bessy rodriguez|bessy rodríguez/.test(q)) return "**Bessy Rodríguez** integra **Inspectoría General**.";
+    if (/jose pinto|josé pinto/.test(q)) return "**José Pinto** integra **Inspectoría General**.";
+    if (/francisco quiroz/.test(q)) return "**Francisco Quiroz** integra **Inspectoría General**.";
+    if (/fernanda bravo/.test(q)) return "**Fernanda Bravo** es **Jefa de U.T.P.** (Unidad Técnico Pedagógica).";
+    if (/sandra andaur/.test(q)) return "**Sandra Andaur** es **Jefa de U.T.P.**";
+    if (/gregorio sepulveda|gregorio sepúlveda|coordinador tec|coordinador téc/.test(q)) return "**Gregorio Sepúlveda** es **Coordinador Técnico Profesional**.";
+    if (/luis gonzalez|luis gonzález|orientacion|orientación/.test(q) && !/parvulo|párvulo/.test(q)) return "**Luis González** está en el **Departamento de Orientación**.";
+    if (/ricardo rios|ricardo ríos|convivencia escolar/.test(q)) return "**Ricardo Ríos** está a cargo de **Convivencia Escolar**.";
+    if (/soledad lopez|soledad lópez|psicosocial/.test(q)) return "**Soledad López** es **Jefa Psicosocial LMM**.";
+    if (/maria ines sepulveda|maría inés sepúlveda|evaluadora/.test(q)) return "**María Inés Sepúlveda** es **Evaluadora** del liceo.";
+    if (/equipo directivo|directivos|inspector general|inspectoría general|utp|unidad tecnico|unidad técnico/.test(q))
+        return JARVIE_KB.directivos;
     if (/delia sepulveda/.test(q)) return "**Delia Sepúlveda** es jefa de carrera de **Contabilidad**.";
     if (/patricia fuentes|fuentes merino/.test(q)) return "**Patricia Fuentes Meriño** es jefa de carrera de **Administración (RRHH)**.";
     if (/elvis luna/.test(q)) return "**Elvis Luna** es jefe de carrera de **Construcciones Metálicas**.";
     if (/inostroza|maria alejandra/.test(q)) return "**María Alejandra Inostroza** es jefa de carrera de **Atención de Párvulos**.";
     if (/norambuena|sandra norambuena/.test(q)) return "**Sandra Norambuena** es jefa de carrera de **Agropecuaria**.";
-    if (/camila cruz/.test(q)) return "**Camila Cruz** es jefa de carrera de **Gastronomía (Cocina)**.";
+    if (/karina soto/.test(q)) return "**Karina Soto** es jefa de carrera de **Gastronomía (Cocina)**.";
     if (/rice|reglamento|convivencia|uniforme|conducto regular|aula segura|mediacion|sello educativo|bullying|ciberbullying|pise/.test(q)) {
         return JARVIE_KB.rice;
     }
@@ -724,7 +831,7 @@ function getJarvieReplyLocal(text) {
         return "**Agropecuaria** (jefa: **Sandra Norambuena**). Página **Agropecuaria**.";
     }
     if (/gastro|cocina|banquete/.test(q)) {
-        return "**Gastronomía** (jefa: **Camila Cruz**). Página **Gastronomía**.";
+        return "**Gastronomía** (jefa: **Karina Soto**). Página **Gastronomía**.";
     }
     if (/contacto|correo|telefono|ubicacion|san javier/.test(q)) {
         return "📍 **Liceo Bicentenario Manuel Montt** — San Javier. Revisa **Contacto** en el menú.";
@@ -740,7 +847,7 @@ function getJarvieReplyLocal(text) {
 
 function isInstitutionalQuery(text) {
     const q = normalizeText(text);
-    return /nota|calific|calificando|justific|asistencia|inasistencia|sueldo|salario|jefe de carrera|jefa de carrera|jefatura|rice|reglamento|convivencia|uniforme|conducto|aula segura|historia|fundacion|bicentenario|director|aquiles|aaron|cancino|cristobal|eco-red|eco red|especialidad|programac|electric|contabil|administr|parvulo|agro|gastro|metal|simce|rbd|manuel montt/.test(q);
+    return /nota|calific|calificando|justific|asistencia|inasistencia|sueldo|salario|jefe de carrera|jefa de carrera|jefatura|rice|reglamento|convivencia|uniforme|conducto|aula segura|historia|fundacion|bicentenario|director|aquiles|subdirector|inspector|utp|directivo|orientacion|psicosocial|evaluadora|aaron|cancino|cristobal|eco-red|eco red|especialidad|programac|electric|contabil|administr|parvulo|agro|gastro|metal|simce|rbd|manuel montt/.test(q);
 }
 
 async function getJarvieReplyAI(userText) {

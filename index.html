@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <link rel="stylesheet" href="style.css?v=blue1">
+  <link rel="stylesheet" href="style.css?v=nav3">
 </head>
 <body>
 
@@ -19,38 +19,77 @@
   <a href="#inicio" class="skip-link">Saltar al contenido principal</a>
 
   <!-- NAVBAR -->
-  <header class="navbar-container" id="navbar" role="banner">
-    <nav class="navbar" aria-label="Navegación principal">
-      <a href="#inicio" class="logo" aria-label="Portafolio Virtual - Inicio">
-        <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
-        <span>Portafolio<b>Virtual</b></span>
-      </a>
+  <header class="site-header" id="navbar" role="banner">
+    <nav class="nav-bar" aria-label="Navegación principal">
+      <div class="nav-left">
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-panel">
+          <span class="menu-toggle-bar"></span>
+          <span class="menu-toggle-bar"></span>
+          <span class="menu-toggle-bar"></span>
+        </button>
+        <a href="#inicio" class="brand" aria-label="Portafolio Virtual - Inicio">
+          <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+          <span class="brand-text">Portafolio<b>Virtual</b></span>
+        </a>
+      </div>
 
-      <button class="hamburger" id="hamburger" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="nav-menu">
-        <i class="fa-solid fa-bars" aria-hidden="true"></i>
-      </button>
-
-      <ul class="nav-menu" id="nav-menu" role="menubar">
-        <li role="none"><a href="#inicio" class="nav-link active" role="menuitem">Inicio</a></li>
-        <li role="none"><a href="#especialidades" class="nav-link" role="menuitem">Especialidades</a></li>
-        <li role="none"><a href="#proyectos" class="nav-link" role="menuitem">Proyectos</a></li>
-        <li role="none"><a href="#comentarios" class="nav-link" role="menuitem">Comentarios</a></li>
-        <li role="none"><a href="#creditos" class="nav-link" role="menuitem">Créditos</a></li>
-        <li role="none"><a href="#contacto" class="nav-link" role="menuitem">Contacto</a></li>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+        <li><a href="#especialidades" class="nav-link">Especialidades</a></li>
+        <li><a href="#proyectos" class="nav-link">Proyectos</a></li>
+        <li><a href="#comentarios" class="nav-link">Comentarios</a></li>
+        <li><a href="#creditos" class="nav-link">Créditos</a></li>
+        <li><a href="#contacto" class="nav-link">Contacto</a></li>
       </ul>
 
-      <div class="nav-actions">
-        <button class="theme-toggle" id="theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar tema claro u oscuro">
+      <div class="nav-right">
+        <button type="button" class="theme-toggle" id="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro">
           <i class="fa-solid fa-moon" aria-hidden="true"></i>
         </button>
-        <a href="#proyectos" class="btn-primary">
-          <i class="fa-solid fa-rocket" aria-hidden="true"></i> Explorar
+        <a href="#proyectos" class="btn-primary btn-explore">
+          <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+          <span class="btn-explore-label">Explorar</span>
         </a>
       </div>
     </nav>
   </header>
 
-  <!-- HERO -->
+  <!-- PANEL MENÚ (drawer) -->
+  <div class="menu-backdrop" id="menu-backdrop" hidden></div>
+  <aside class="menu-panel" id="menu-panel" aria-hidden="true" aria-label="Menú del sitio">
+    <div class="menu-panel-top">
+      <a href="#inicio" class="brand menu-brand">
+        <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+        <span class="brand-text">Portafolio<b>Virtual</b></span>
+      </a>
+      <button type="button" class="menu-close" id="menu-close" aria-label="Cerrar menú">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <nav class="menu-panel-nav">
+      <p class="menu-section">Navegación</p>
+      <a href="#inicio" class="menu-item"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+      <a href="#especialidades" class="menu-item"><i class="fa-solid fa-graduation-cap"></i><span>Especialidades</span></a>
+      <a href="#proyectos" class="menu-item"><i class="fa-solid fa-folder-open"></i><span>Proyectos</span></a>
+      <a href="#comentarios" class="menu-item"><i class="fa-solid fa-comments"></i><span>Comentarios</span></a>
+      <a href="#creditos" class="menu-item"><i class="fa-solid fa-award"></i><span>Créditos</span></a>
+      <a href="#contacto" class="menu-item"><i class="fa-solid fa-envelope"></i><span>Contacto</span></a>
+      <p class="menu-section">Especialidades</p>
+      <a href="programacion.html" class="menu-item"><i class="fa-solid fa-code"></i><span>Programación</span></a>
+      <a href="electricidad.html" class="menu-item"><i class="fa-solid fa-bolt"></i><span>Electricidad</span></a>
+      <a href="contabilidad.html" class="menu-item"><i class="fa-solid fa-calculator"></i><span>Contabilidad</span></a>
+      <a href="administracion.html" class="menu-item"><i class="fa-solid fa-briefcase"></i><span>Administración</span></a>
+      <a href="construcciones-metalicas.html" class="menu-item"><i class="fa-solid fa-industry"></i><span>Constr. Metálicas</span></a>
+      <a href="atencion-parvulos.html" class="menu-item"><i class="fa-solid fa-child"></i><span>Atención de Párvulos</span></a>
+      <a href="agropecuaria.html" class="menu-item"><i class="fa-solid fa-wheat-awn"></i><span>Agropecuaria</span></a>
+      <a href="gastronomia.html" class="menu-item"><i class="fa-solid fa-utensils"></i><span>Gastronomía</span></a>
+    </nav>
+    <div class="menu-panel-foot">
+      Liceo Bicentenario Manuel Montt<br>San Javier · Maule
+    </div>
+  </aside>
+
+    <!-- HERO -->
   <section class="hero" id="inicio">
     <div class="section-container hero-container">
       <div class="hero-content">
@@ -98,7 +137,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
-          <div class="stat-number" data-target="89">0</div>
+          <div class="stat-number" data-target="80">0</div>
           <p class="stat-label">Años de trayectoria</p>
         </div>
       </div>
@@ -412,6 +451,6 @@
     </form>
   </div>
 
-  <script src="script.js?v=7"></script>
+  <script src="script.js?v=theme2"></script>
 </body>
 </html>
