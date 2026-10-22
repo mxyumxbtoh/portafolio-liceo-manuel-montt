@@ -28,7 +28,7 @@
       --border: rgba(255,255,255,0.08);
       --text: #F1F5F9;
       --muted: #94A3B8;
-      --primary: #3B82F6;
+      --primary: #F59E0B;
       --primary-soft: rgba(59, 130, 246, 0.15);
       --accent-yellow: #FBBF24;
       --accent-purple: #A78BFA;
@@ -107,15 +107,12 @@
       max-width: 1100px;
     }
     .topbar {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
+      display: flex;
       align-items: center;
+      justify-content: space-between;
       margin-bottom: 1.8rem;
       gap: 1rem;
-    }
-    .topbar h1 {
-      text-align: center;
-      justify-self: center;
+      flex-wrap: wrap;
     }
     .topbar h1 { font-size: 1.6rem; font-weight: 700; }
     .topbar h1 span { color: var(--primary); }
@@ -404,186 +401,298 @@
       font-size: 1rem;
       line-height: 1;
     }
+
+    /* Barra superior tipo index sobre páginas de especialidad */
+    .navbar-container {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .app { grid-template-rows: auto 1fr; }
+    /* Cuando hay navbar arriba, el sidebar empieza debajo */
+    body > .navbar-container + .drawer-overlay + .side-drawer + .app,
+    body > .navbar-container + .app {
+      min-height: calc(100vh - 64px);
+    }
+/* SIDEBAR SCROLL FIX */
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      padding: 1rem 0.75rem;
+    }
+    .sidebar-logo {
+      flex-shrink: 0;
+      margin-bottom: 0.5rem;
+    }
+    .nav-list {
+      list-style: none;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      padding-bottom: 0.5rem;
+      margin: 0;
+    }
+    .nav-list li {
+      margin-bottom: 0.2rem;
+    }
+    .sidebar-footer {
+      flex-shrink: 0;
+      padding-top: 0.75rem;
+      margin-top: 0.25rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+
+    /* Sin sidebar fijo: contenido a ancho completo */
+    .app {
+      display: block !important;
+      grid-template-columns: none !important;
+      min-height: auto !important;
+    }
+    .main {
+      width: 100% !important;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 2.5rem;
+    }
+    .sidebar { display: none !important; }
+
+
+    /* THEME TOGGLE CLICK FIX */
+    .theme-toggle,
+    .theme-toggle-spec,
+    #theme-toggle,
+    #theme-toggle-spec {
+      position: relative;
+      z-index: 50;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+    .site-header {
+      z-index: 100;
+    }
+    .nav-right .theme-toggle {
+      width: 44px;
+      height: 44px;
+    }
+
+    .badge.red { background: rgba(239,68,68,0.15); color: #F87171; }
+    [data-theme="light"] .badge.red { background: rgba(239,68,68,0.12); color: #DC2626; }
 </style>
 
   
+  <link rel="stylesheet" href="style.css?v=nav3">
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar" id="sidebar">
-      <a href="index.html" class="sidebar-logo">
-        <span class="logo-mark">PV</span>
-        <span>Portafolio<span>Virtual</span></span>
-      </a>
-      <ul class="nav-list">
-        <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
-        <li><a href="index.html#especialidades"><i class="fa-solid fa-graduation-cap"></i> Especialidades</a></li>
-        <li><a href="index.html#proyectos"><i class="fa-solid fa-folder-open"></i> Proyectos</a></li>
-        <li><a href="index.html#comentarios"><i class="fa-solid fa-comments"></i> Comentarios</a></li>
-        <li><a href="index.html#contacto"><i class="fa-solid fa-envelope"></i> Contacto</a></li>
-        <li><a href="programacion.html"><i class="fa-solid fa-code"></i> Programación</a></li>
-        <li><a href="electricidad.html" class="active"><i class="fa-solid fa-bolt"></i> Electricidad</a></li>
-        <li><a href="contabilidad.html"><i class="fa-solid fa-calculator"></i> Contabilidad</a></li>
-        <li><a href="administracion.html"><i class="fa-solid fa-briefcase"></i> Administración</a></li>
-        <li><a href="construcciones-metalicas.html"><i class="fa-solid fa-industry"></i> Constr. Metálicas</a></li>
-        <li><a href="atencion-parvulos.html"><i class="fa-solid fa-child"></i> Atención de Párvulos</a></li>
-        <li><a href="agropecuaria.html"><i class="fa-solid fa-wheat-awn"></i> Agropecuaria</a></li>
-        <li><a href="gastronomia.html"><i class="fa-solid fa-utensils"></i> Gastronomía</a></li>
+<!-- NAVBAR -->
+  <header class="site-header" id="navbar" role="banner">
+    <nav class="nav-bar" aria-label="Navegación principal">
+      <div class="nav-left">
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-panel">
+          <span class="menu-toggle-bar"></span>
+          <span class="menu-toggle-bar"></span>
+          <span class="menu-toggle-bar"></span>
+        </button>
+        <a href="index.html" class="brand" aria-label="Portafolio Virtual - Inicio">
+          <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+          <span class="brand-text">Portafolio<b>Virtual</b></span>
+        </a>
+      </div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html#inicio" class="nav-link">Inicio</a></li>
+        <li><a href="index.html#especialidades" class="nav-link active">Especialidades</a></li>
+        <li><a href="index.html#proyectos" class="nav-link">Proyectos</a></li>
+        <li><a href="index.html#comentarios" class="nav-link">Comentarios</a></li>
+        <li><a href="index.html#creditos" class="nav-link">Créditos</a></li>
+        <li><a href="index.html#contacto" class="nav-link">Contacto</a></li>
       </ul>
-      <div class="sidebar-footer">Liceo Bicentenario<br>Manuel Montt · San Javier</div>
-    </aside>
+      <div class="nav-right">
+        <button type="button" class="theme-toggle" id="theme-toggle" type="button" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        </button>
+        <a href="index.html#proyectos" class="btn-primary btn-explore">
+          <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+          <span class="btn-explore-label">Explorar</span>
+        </a>
+      </div>
+    </nav>
+  </header>
 
-    <main class="main">
+  <div class="menu-backdrop" id="menu-backdrop" hidden></div>
+  <aside class="menu-panel" id="menu-panel" aria-hidden="true" aria-label="Menú del sitio">
+    <div class="menu-panel-top">
+      <a href="index.html" class="brand menu-brand">
+        <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+        <span class="brand-text">Portafolio<b>Virtual</b></span>
+      </a>
+      <button type="button" class="menu-close" id="menu-close" aria-label="Cerrar menú">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <nav class="menu-panel-nav">
+      <p class="menu-section">Navegación</p>
+      <a href="index.html#inicio" class="menu-item"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+      <a href="index.html#especialidades" class="menu-item"><i class="fa-solid fa-graduation-cap"></i><span>Especialidades</span></a>
+      <a href="index.html#proyectos" class="menu-item"><i class="fa-solid fa-folder-open"></i><span>Proyectos</span></a>
+      <a href="index.html#comentarios" class="menu-item"><i class="fa-solid fa-comments"></i><span>Comentarios</span></a>
+      <a href="index.html#creditos" class="menu-item"><i class="fa-solid fa-award"></i><span>Créditos</span></a>
+      <a href="index.html#contacto" class="menu-item"><i class="fa-solid fa-envelope"></i><span>Contacto</span></a>
+      <p class="menu-section">Especialidades</p>
+      <a href="programacion.html" class="menu-item"><i class="fa-solid fa-code"></i><span>Programación</span></a>
+      <a href="electricidad.html" class="menu-item active"><i class="fa-solid fa-bolt"></i><span>Electricidad</span></a>
+      <a href="contabilidad.html" class="menu-item"><i class="fa-solid fa-calculator"></i><span>Contabilidad</span></a>
+      <a href="administracion.html" class="menu-item"><i class="fa-solid fa-briefcase"></i><span>Administración</span></a>
+      <a href="construcciones-metalicas.html" class="menu-item"><i class="fa-solid fa-industry"></i><span>Constr. Metálicas</span></a>
+      <a href="atencion-parvulos.html" class="menu-item"><i class="fa-solid fa-child"></i><span>Atención de Párvulos</span></a>
+      <a href="agropecuaria.html" class="menu-item"><i class="fa-solid fa-wheat-awn"></i><span>Agropecuaria</span></a>
+      <a href="gastronomia.html" class="menu-item"><i class="fa-solid fa-utensils"></i><span>Gastronomía</span></a>
+    </nav>
+    <div class="menu-panel-foot">
+      Liceo Bicentenario Manuel Montt<br>San Javier · Maule
+    </div>
+  </aside>
+
+<div class="app">
+        <main class="main">
       <div class="topbar">
-        <button type="button" class="theme-toggle-spec" id="theme-toggle-spec" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro" style="width:40px;height:40px;min-width:40px;min-height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface,#121A2B);color:var(--text,#F1F5F9);display:inline-grid;place-items:center;cursor:pointer;padding:0;overflow:hidden;line-height:1;flex-shrink:0;"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+      <button type="button" class="theme-toggle-spec" id="theme-toggle-spec" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro" style="width:40px;height:40px;min-width:40px;min-height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface,#121A2B);color:var(--text,#F1F5F9);display:inline-grid;place-items:center;cursor:pointer;padding:0;overflow:hidden;line-height:1;flex-shrink:0;"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+
         <h1>Especialidad de <span>Electricidad</span></h1>
-        <a href="index.html#especialidades" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+        <a href="index.html#especialidades" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i> Volver
+        </a>
       </div>
 
       <section class="profile-card">
-        <img src="electricidad-logo.png" alt="Logo Electricidad" class="profile-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-        <div class="profile-logo-fallback" style="display:none;"><i class="fa-solid fa-bolt"></i></div>
+        <img src="electricidad-logo.png" alt="Logo Electricidad LBMM" class="profile-logo">
         <div class="profile-info">
           <h2>Electricidad</h2>
           <p class="role">Especialidad Técnica · Liceo Bicentenario Manuel Montt</p>
           <div class="profile-badges">
-            <span class="badge accent">PLCs</span>
-            <span class="badge">CadSimu</span>
-            <span class="badge">Tableros</span>
-            <span class="badge">Fotovoltaica</span>
+            <span class="badge yellow">Instalaciones</span>
+            <span class="badge blue">Tableros</span>
+            <span class="badge green">Automatización</span>
+            <span class="badge purple">Fotovoltaica</span>
           </div>
-          <p class="profile-desc">Forma técnicos capaces de instalar, mantener y reparar sistemas eléctricos en viviendas, comercios e industrias, con base también en automatización y energías renovables.</p>
+          <p class="profile-desc">
+            Forma técnicos capaces de instalar, mantener y reparar sistemas eléctricos en viviendas, comercios e industrias, con base en seguridad y normativa técnica. Alta empleabilidad y continuidad de estudios.
+          </p>
         </div>
       </section>
+
       <div class="stats-row">
-        <div class="stat-box"><div class="value">Amplio</div><div class="label">Campo laboral</div></div>
-        <div class="stat-box"><div class="value">Independiente</div><div class="label">Emprendimiento</div></div>
-        <div class="stat-box"><div class="value">Industrial</div><div class="label">Mantenimiento</div></div>
-        <div class="stat-box"><div class="value">Renovables</div><div class="label">Especialización</div></div>
+        <div class="stat-box">
+          <div class="value">Alta</div>
+          <div class="label">Demanda laboral</div>
+        </div>
+        <div class="stat-box">
+          <div class="value">~$900K</div>
+          <div class="label">Sueldo promedio</div>
+        </div>
+        <div class="stat-box">
+          <div class="value">8+</div>
+          <div class="label">Áreas de estudio</div>
+        </div>
+        <div class="stat-box">
+          <div class="value">Energía</div>
+          <div class="label">Sector productivo</div>
+        </div>
       </div>
+
       <div class="sections-grid">
         <article class="card">
-          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-briefcase"></i></span> Campo laboral</h3>
-          <p>Los conocimientos eléctricos son necesarios en viviendas, comercios, construcción, industrias, servicios y mantenimiento. El egresado puede trabajar en empresas o de forma independiente.</p>
+          <h3 class="card-title"><i class="fa-solid fa-briefcase"></i> Campo laboral</h3>
+          <p>Los conocimientos eléctricos son necesarios en viviendas, comercios, construcción, industrias y mantenimiento. El egresado puede trabajar en empresas o de forma independiente.</p>
           <ul class="list-clean">
             <li>Instalaciones eléctricas residenciales y comerciales</li>
             <li>Empresas de construcción e infraestructura</li>
             <li>Montaje e instalación de sistemas eléctricos</li>
-            <li>Mantenimiento eléctrico industrial</li>
-            <li>Mantenimiento preventivo y correctivo</li>
-            <li>Tableros eléctricos, alumbrado y fuerza</li>
-            <li>Automatización básica</li>
-            <li>Energías renovables y sistemas fotovoltaicos</li>
-            <li>Climatización y sistemas asociados</li>
-            <li>Servicios técnicos e independientes</li>
+            <li>Mantenimiento eléctrico industrial preventivo y correctivo</li>
+            <li>Tableros eléctricos, alumbrado, fuerza y control</li>
+            <li>Automatización básica y energías renovables (fotovoltaica)</li>
+            <li>Climatización y sistemas eléctricos asociados</li>
+            <li>Servicio técnico e independentismo eléctrico</li>
           </ul>
         </article>
-        <div style="display:flex;flex-direction:column;gap:1.15rem;">
-          <article class="card" style="flex:1;">
-            <h3 class="card-title"><span class="icon"><i class="fa-solid fa-graduation-cap"></i></span> Continuidad de estudios</h3>
+
+        <div class="stack">
+          <article class="card">
+            <h3 class="card-title"><i class="fa-solid fa-graduation-cap"></i> Continuidad de estudios</h3>
             <ul class="list-clean">
-              <li>Técnico en Electricidad</li>
-              <li>Técnico en Electricidad y Electrónica</li>
-              <li>Ingeniería Eléctrica</li>
-              <li>Ingeniería en Automatización y Control</li>
-              <li>Ingeniería Electrónica</li>
-              <li>Energías Renovables</li>
-              <li>Mantenimiento Industrial</li>
-              <li>Automatización Industrial</li>
+            <li>Técnico en Electricidad</li>
+            <li>Ingeniería Eléctrica / Electrónica</li>
+            <li>Automatización y Control</li>
+            <li>Energías Renovables</li>
+            <li>Mantenimiento Industrial</li>
+            <li>Tecnicaturas SEC / especialización industrial</li>
             </ul>
           </article>
+
           <article class="card">
-            <h3 class="card-title"><span class="icon"><i class="fa-solid fa-user-tie"></i></span> Jefe de Carrera</h3>
+            <h3 class="card-title"><i class="fa-solid fa-user-tie"></i> Jefe de Carrera</h3>
             <div class="jefe-row">
               <div class="jefe-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
-              <div><h3>Hans Saavedra</h3><p>Jefe de Carrera · Electricidad</p></div>
+              <div>
+                <h3>Hans Saavedra</h3>
+                <p>Jefe de Carrera · Electricidad</p>
+              </div>
             </div>
           </article>
         </div>
       </div>
-      <article class="card" style="margin-bottom:1.15rem;">
-        <h3 class="card-title"><span class="icon"><i class="fa-solid fa-chart-line"></i></span> Niveles de desarrollo profesional</h3>
-        <p>Los ingresos y responsabilidades varían según experiencia, especialización y tipo de trabajo.</p>
-        <div class="level-grid">
-          <div class="level-item"><div class="lvl">Técnico / ayudante inicial</div><div class="desc">Quienes comienzan su experiencia laboral en cargos de apoyo e instalación básica.</div></div>
-          <div class="level-item"><div class="lvl">Técnico con experiencia</div><div class="desc">Instalaciones, mantenimiento y reparación de sistemas eléctricos.</div></div>
-          <div class="level-item"><div class="lvl">Técnico especializado</div><div class="desc">Mayor complejidad: industrial, control y automatización.</div></div>
-          <div class="level-item"><div class="lvl">Avanzado / independiente</div><div class="desc">Proyectos propios, contratista y mayor responsabilidad.</div></div>
-        </div>
-      </article>
+
       <div class="sections-grid">
         <article class="card">
-          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-house-chimney"></i></span> Trabajo independiente</h3>
-          <p>Una característica importante de la especialidad es poder desarrollar actividades de forma independiente: instalaciones residenciales y comerciales, presupuestos, diagnósticos, mantenimiento y proyectos eléctricos.</p>
-          <p>También es posible crear un emprendimiento de servicios eléctricos para clientes particulares, empresas o contratistas.</p>
-        </article>
-        <article class="card">
-          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-building"></i></span> Construcción e infraestructura</h3>
-          <p>En el sector de la construcción el egresado puede actuar como ayudante, instalador o montajista eléctrico.</p>
+          <h3 class="card-title"><i class="fa-solid fa-clipboard-list"></i> Productos esperados</h3>
           <ul class="list-clean">
-            <li>Canalizaciones y conductores</li>
-            <li>Tableros de distribución</li>
-            <li>Alumbrado y sistemas de fuerza</li>
-            <li>Interpretación de planos eléctricos</li>
-            <li>Mantenimiento y verificación de sistemas</li>
+            <li>Instalaciones eléctricas residenciales y comerciales ejecutadas</li>
+            <li>Tableros e interpretaciones de planos técnicos</li>
+            <li>Mediciones, mantenciones y reportes de fallas</li>
+            <li>Cálculo de materiales y presupuestos básicos</li>
+            <li>Apoyo en automatización y sistemas fotovoltaicos</li>
           </ul>
         </article>
-      </div>
-      <div class="sections-grid">
+
         <article class="card">
-          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-industry"></i></span> Industrial y mantenimiento</h3>
-          <p>El área industrial ofrece oportunidades en mantenimiento y funcionamiento de equipos e instalaciones eléctricas, en plantas, edificios, hospitales y comercios.</p>
-          <ul class="list-clean">
-            <li>Mantenimiento preventivo y correctivo</li>
-            <li>Motores monofásicos y trifásicos</li>
-            <li>Tableros, control y protección</li>
-            <li>Automatización básica e instalaciones de fuerza</li>
-            <li>Diagnóstico de fallas eléctricas</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-solar-panel"></i></span> Energías renovables</h3>
-          <p>La formación eléctrica sirve de base para especializarse en energías renovables, especialmente solar fotovoltaica: montaje, mantenimiento y conexión de sistemas asociados a paneles solares.</p>
-          <p>Es un campo en crecimiento por la demanda de generación y uso eficiente de la energía.</p>
-        </article>
-      </div>
-      <article class="card" style="margin-bottom:1.15rem;">
-        <h3 class="card-title"><span class="icon"><i class="fa-solid fa-box-open"></i></span> Productos esperados</h3>
-        <ul class="list-clean" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));display:grid;">
-          <li>Circuitos e infraestructura eléctrica básica</li>
-          <li>Proyectos eléctricos domiciliarios</li>
-          <li>Esquemas unilineales y planos CAD</li>
-          <li>Presupuestos de materiales y mano de obra</li>
-          <li>Instalaciones residenciales y comerciales</li>
-          <li>Informes de diagnóstico y mantenimiento</li>
-          <li>Sistemas de control y protección</li>
-          <li>Proyectos de fuerza, alumbrado y automatización</li>
-        </ul>
-      </article>
-      <div class="sections-grid">
-        <article class="card">
-          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-lightbulb"></i></span> Importancia</h3>
-          <p>La electricidad es fundamental para viviendas, empresas, industrias e instituciones. Contar con técnicos capacitados garantiza el correcto funcionamiento y la seguridad de los sistemas eléctricos.</p>
-          <p>La especialidad va más allá de las instalaciones: incluye planos, mantenimiento, control, fuerza, protección, automatización y nuevas tecnologías energéticas.</p>
-        </article>
-        <article class="card">
-          <h3 class="card-title"><span class="icon"><i class="fa-solid fa-user-check"></i></span> Perfil de egreso</h3>
-          <p>El egresado puede interpretar planos y especificaciones, realizar instalaciones, usar instrumentos de medición, efectuar mantenimiento y participar en sistemas de control y fuerza.</p>
+          <h3 class="card-title"><i class="fa-solid fa-user-check"></i> Perfil de egreso</h3>
+          <p>El egresado interpreta planos y especificaciones, realiza instalaciones eléctricas, usa instrumentos de medición, efectúa mantenimiento y reemplazo de componentes y participa en sistemas de control y fuerza.</p>
           <p>También elabora proyectos, calcula materiales, realiza presupuestos y trabaja respetando procedimientos técnicos y normas de seguridad.</p>
         </article>
       </div>
-      <article class="card" style="margin-bottom:1.15rem;">
-        <h3 class="card-title"><span class="icon"><i class="fa-solid fa-bookmark"></i></span> Resumen</h3>
-        <p>La especialidad de Electricidad prepara para un área esencial en hogares, empresas e industrias. Destacan la diversidad de campos laborales, la posibilidad de trabajar de forma independiente, la continuidad de estudios y la especialización en mantenimiento industrial, automatización, control, electrónica y energías renovables.</p>
+
+      <article class="card" style="margin-bottom: 1.3rem;">
+        <h3 class="card-title"><i class="fa-solid fa-bookmark"></i> Resumen</h3>
+        <p>
+          La especialidad de Electricidad prepara para un área fundamental en hogares, empresas e industrias. Destacan la diversidad de campos laborales, el trabajo independiente, la continuidad de estudios y la especialización en mantenimiento, automatización y energías renovables.
+        </p>
       </article>
+
       <div class="cta-bar">
         <p>¿Quieres ver más especialidades o los proyectos de los estudiantes?</p>
         <div class="cta-actions">
-          <a href="index.html#especialidades" class="btn btn-primary"><i class="fa-solid fa-arrow-left"></i> Especialidades</a>
-          <a href="index.html#proyectos" class="btn btn-outline"><i class="fa-solid fa-folder-open"></i> Proyectos</a>
+          <a href="index.html#especialidades" class="btn btn-primary">
+            <i class="fa-solid fa-arrow-left"></i> Especialidades
+          </a>
+          <a href="index.html#proyectos" class="btn btn-outline">
+            <i class="fa-solid fa-folder-open"></i> Proyectos
+          </a>
         </div>
       </div>
-
     </main>
   </div>
 
@@ -591,55 +700,6 @@
     <i class="fa-solid fa-bars"></i>
   </button>
 
-  <script>
-    const sidebar = document.getElementById('sidebar');
-    const toggle = document.getElementById('menuToggle');
-    toggle.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      const icon = toggle.querySelector('i');
-      icon.className = sidebar.classList.contains('open')
-        ? 'fa-solid fa-xmark'
-        : 'fa-solid fa-bars';
-    });
-    document.querySelectorAll('.nav-list a').forEach(a => {
-      a.addEventListener('click', () => {
-        if (window.innerWidth <= 900) {
-          sidebar.classList.remove('open');
-          toggle.querySelector('i').className = 'fa-solid fa-bars';
-        }
-      });
-    });
-  </script>
-
-  <script>
-    (function () {
-      var KEY = "lm_theme";
-      var html = document.documentElement;
-      function iconFor(theme) {
-        // En modo día = sol; en modo noche = luna
-        return theme === "light"
-          ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
-          : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
-      }
-      function apply(theme) {
-        html.setAttribute("data-theme", theme);
-        localStorage.setItem(KEY, theme);
-        var btn = document.getElementById("theme-toggle-spec");
-        if (btn) btn.innerHTML = iconFor(theme);
-      }
-      document.addEventListener("DOMContentLoaded", function () {
-        var current = html.getAttribute("data-theme") || "dark";
-        apply(current);
-        var btn = document.getElementById("theme-toggle-spec");
-        if (btn) {
-          btn.addEventListener("click", function () {
-            var next = (html.getAttribute("data-theme") === "dark") ? "light" : "dark";
-            apply(next);
-          });
-        }
-      });
-    })();
-  </script>
-
+  <script src="script.js?v=theme2"></script>
 </body>
 </html>

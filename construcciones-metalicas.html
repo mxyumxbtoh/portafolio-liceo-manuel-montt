@@ -415,28 +415,118 @@
       font-size: 1rem;
       line-height: 1;
     }
+
+    /* Barra superior tipo index sobre páginas de especialidad */
+    .navbar-container {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .app { grid-template-rows: auto 1fr; }
+    /* Cuando hay navbar arriba, el sidebar empieza debajo */
+    body > .navbar-container + .drawer-overlay + .side-drawer + .app,
+    body > .navbar-container + .app {
+      min-height: calc(100vh - 64px);
+    }
 </style>
 
   
+  <link rel="stylesheet" href="style.css?v=drawer1">
 </head>
 <body>
+<!-- NAVBAR -->
+  <header class="navbar-container" id="navbar" role="banner">
+    <nav class="navbar" aria-label="Navegación principal">
+      <div class="nav-brand">
+        <button class="hamburger" id="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="side-drawer">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <a href="index.html" class="logo" aria-label="Portafolio Virtual - Inicio">
+          <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+          <span>Portafolio<b>Virtual</b></span>
+        </a>
+      </div>
+
+      <ul class="nav-menu" id="nav-menu" role="menubar">
+        <li role="none"><a href="index.html#inicio" class="nav-link" role="menuitem">Inicio</a></li>
+        <li role="none"><a href="index.html#especialidades" class="nav-link active" role="menuitem">Especialidades</a></li>
+        <li role="none"><a href="index.html#proyectos" class="nav-link" role="menuitem">Proyectos</a></li>
+        <li role="none"><a href="index.html#comentarios" class="nav-link" role="menuitem">Comentarios</a></li>
+        <li role="none"><a href="index.html#creditos" class="nav-link" role="menuitem">Créditos</a></li>
+        <li role="none"><a href="index.html#contacto" class="nav-link" role="menuitem">Contacto</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar tema claro u oscuro">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        </button>
+        <a href="index.html#proyectos" class="btn-primary">
+          <i class="fa-solid fa-rocket" aria-hidden="true"></i> Explorar
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MENÚ LATERAL (drawer) -->
+  <div class="drawer-overlay" id="drawer-overlay" hidden></div>
+  <aside class="side-drawer" id="side-drawer" aria-hidden="true" aria-label="Menú del sitio">
+    <div class="drawer-header">
+      <a href="index.html#inicio" class="logo drawer-logo">
+        <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+        <span>Portafolio<b>Virtual</b></span>
+      </a>
+      <button type="button" class="drawer-close" id="drawer-close" aria-label="Cerrar menú">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <nav class="drawer-nav">
+      <p class="drawer-label">Navegación</p>
+      <a href="index.html#inicio" class="drawer-link"><i class="fa-solid fa-house"></i> Inicio</a>
+      <a href="index.html#especialidades" class="drawer-link"><i class="fa-solid fa-graduation-cap"></i> Especialidades</a>
+      <a href="index.html#proyectos" class="drawer-link"><i class="fa-solid fa-folder-open"></i> Proyectos</a>
+      <a href="index.html#comentarios" class="drawer-link"><i class="fa-solid fa-comments"></i> Comentarios</a>
+      <a href="index.html#creditos" class="drawer-link"><i class="fa-solid fa-award"></i> Créditos</a>
+      <a href="index.html#contacto" class="drawer-link"><i class="fa-solid fa-envelope"></i> Contacto</a>
+      <p class="drawer-label">Especialidades</p>
+      <a href="programacion.html" class="drawer-link"><i class="fa-solid fa-code"></i> Programación</a>
+      <a href="electricidad.html" class="drawer-link"><i class="fa-solid fa-bolt"></i> Electricidad</a>
+      <a href="contabilidad.html" class="drawer-link"><i class="fa-solid fa-calculator"></i> Contabilidad</a>
+      <a href="administracion.html" class="drawer-link"><i class="fa-solid fa-briefcase"></i> Administración</a>
+      <a href="construcciones-metalicas.html" class="drawer-link"><i class="fa-solid fa-industry"></i> Constr. Metálicas</a>
+      <a href="atencion-parvulos.html" class="drawer-link"><i class="fa-solid fa-child"></i> Atención de Párvulos</a>
+      <a href="agropecuaria.html" class="drawer-link"><i class="fa-solid fa-wheat-awn"></i> Agropecuaria</a>
+      <a href="gastronomia.html" class="drawer-link"><i class="fa-solid fa-utensils"></i> Gastronomía</a>
+    </nav>
+  </aside>
+
+
+  
+
   <div class="app">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-logo">
+        <aside class="sidebar" id="sidebar">
+      <a href="index.html" class="sidebar-logo">
         <i class="fa-solid fa-laptop-code"></i>
         <span>Portafolio<b>Virtual</b></span>
-      </div>
+      </a>
       <ul class="nav-list">
+        <li class="nav-section">Navegación</li>
         <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
         <li><a href="index.html#especialidades"><i class="fa-solid fa-graduation-cap"></i> Especialidades</a></li>
         <li><a href="index.html#proyectos"><i class="fa-solid fa-folder-open"></i> Proyectos</a></li>
         <li><a href="index.html#comentarios"><i class="fa-solid fa-comments"></i> Comentarios</a></li>
+        <li><a href="index.html#creditos"><i class="fa-solid fa-award"></i> Créditos</a></li>
         <li><a href="index.html#contacto"><i class="fa-solid fa-envelope"></i> Contacto</a></li>
+        <li class="nav-section">Especialidades</li>
         <li><a href="programacion.html"><i class="fa-solid fa-code"></i> Programación</a></li>
         <li><a href="electricidad.html"><i class="fa-solid fa-bolt"></i> Electricidad</a></li>
         <li><a href="contabilidad.html"><i class="fa-solid fa-calculator"></i> Contabilidad</a></li>
         <li><a href="administracion.html"><i class="fa-solid fa-briefcase"></i> Administración</a></li>
-        <li><a href="#" class="active"><i class="fa-solid fa-industry"></i> Constr. Metálicas</a></li>
+        <li><a href="construcciones-metalicas.html" class="active"><i class="fa-solid fa-industry"></i> Constr. Metálicas</a></li>
         <li><a href="atencion-parvulos.html"><i class="fa-solid fa-child"></i> Atención de Párvulos</a></li>
         <li><a href="agropecuaria.html"><i class="fa-solid fa-wheat-awn"></i> Agropecuaria</a></li>
         <li><a href="gastronomia.html"><i class="fa-solid fa-utensils"></i> Gastronomía</a></li>
@@ -657,6 +747,43 @@
             apply(next);
           });
         }
+      });
+    })();
+  </script>
+
+
+  <script src="script.js?v=8"></script>
+  <script>
+    // Specialty pages: ensure theme button in topbar still works if present
+    (function () {
+      var KEY = "lm_theme";
+      var html = document.documentElement;
+      function iconFor(theme) {
+        return theme === "light"
+          ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
+          : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
+      }
+      function apply(theme) {
+        html.setAttribute("data-theme", theme);
+        try { localStorage.setItem(KEY, theme); } catch (e) {}
+        var btn = document.getElementById("theme-toggle");
+        if (btn) btn.innerHTML = iconFor(theme);
+        var btn2 = document.getElementById("theme-toggle-spec");
+        if (btn2) btn2.innerHTML = iconFor(theme);
+      }
+      var saved = null;
+      try { saved = localStorage.getItem(KEY); } catch (e) {}
+      if (saved === "light" || saved === "dark") apply(saved);
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var t1 = document.getElementById("theme-toggle");
+        var t2 = document.getElementById("theme-toggle-spec");
+        function toggle() {
+          var next = html.getAttribute("data-theme") === "light" ? "dark" : "light";
+          apply(next);
+        }
+        if (t1) t1.addEventListener("click", toggle);
+        if (t2) t2.addEventListener("click", toggle);
       });
     })();
   </script>
