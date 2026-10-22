@@ -498,26 +498,55 @@ function initComments() {
     };
     const setLocal = (arr) => localStorage.setItem(LOCAL_KEY, JSON.stringify(arr));
 
+    let commentsExpanded = false;
+    let lastComments = [];
+
+    const buildItem = (c) => {
+        const item = document.createElement("div");
+        item.className = "comment-item";
+        item.innerHTML =
+            '<div class="comment-header">' +
+            '<strong class="comment-author">' + escapeHTML(c.author) + '</strong>' +
+            '<span class="comment-date">' + escapeHTML(c.date || "") + '</span>' +
+            '</div>' +
+            '<p class="comment-body">' + escapeHTML(c.body) + '</p>';
+        return item;
+    };
+
     const render = (comments) => {
+        lastComments = Array.isArray(comments) ? comments : [];
         list.innerHTML = "";
-        if (count) count.innerText = String(comments.length);
-        if (!comments.length) {
+        if (count) count.innerText = String(lastComments.length);
+        if (!lastComments.length) {
             list.innerHTML = '<p class="no-comments-msg">Sin comentarios aún. Sé el primero.</p>';
             return;
         }
+
+        const LIMIT = 3;
+        const showAll = commentsExpanded || lastComments.length <= LIMIT;
+        const visible = showAll ? lastComments : lastComments.slice(0, LIMIT);
+
         const fragment = document.createDocumentFragment();
-        comments.forEach(c => {
-            const item = document.createElement("div");
-            item.className = "comment-item";
-            item.innerHTML =
-                '<div class="comment-header">' +
-                '<strong class="comment-author">' + escapeHTML(c.author) + '</strong>' +
-                '<span class="comment-date">' + escapeHTML(c.date || "") + '</span>' +
-                '</div>' +
-                '<p class="comment-body">' + escapeHTML(c.body) + '</p>';
-            fragment.appendChild(item);
-        });
+        visible.forEach((c) => fragment.appendChild(buildItem(c)));
         list.appendChild(fragment);
+
+        if (lastComments.length > LIMIT) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "comments-toggle-btn";
+            btn.setAttribute("aria-expanded", showAll ? "true" : "false");
+            if (showAll) {
+                btn.innerHTML = '<i class="fa-solid fa-chevron-up" aria-hidden="true"></i> Ver menos';
+            } else {
+                const rest = lastComments.length - LIMIT;
+                btn.innerHTML = '<i class="fa-solid fa-chevron-down" aria-hidden="true"></i> Ver más... (' + rest + ')';
+            }
+            btn.addEventListener("click", () => {
+                commentsExpanded = !commentsExpanded;
+                render(lastComments);
+            });
+            list.appendChild(btn);
+        }
     };
 
     initFirebase().then((ok) => {
