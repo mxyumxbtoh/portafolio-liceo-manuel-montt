@@ -401,38 +401,171 @@
       font-size: 1rem;
       line-height: 1;
     }
+
+    /* Barra superior tipo index sobre páginas de especialidad */
+    .navbar-container {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .app { grid-template-rows: auto 1fr; }
+    /* Cuando hay navbar arriba, el sidebar empieza debajo */
+    body > .navbar-container + .drawer-overlay + .side-drawer + .app,
+    body > .navbar-container + .app {
+      min-height: calc(100vh - 64px);
+    }
+/* SIDEBAR SCROLL FIX */
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      padding: 1rem 0.75rem;
+    }
+    .sidebar-logo {
+      flex-shrink: 0;
+      margin-bottom: 0.5rem;
+    }
+    .nav-list {
+      list-style: none;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      padding-bottom: 0.5rem;
+      margin: 0;
+    }
+    .nav-list li {
+      margin-bottom: 0.2rem;
+    }
+    .sidebar-footer {
+      flex-shrink: 0;
+      padding-top: 0.75rem;
+      margin-top: 0.25rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+
+    /* Sin sidebar fijo: contenido a ancho completo */
+    .app {
+      display: block !important;
+      grid-template-columns: none !important;
+      min-height: auto !important;
+    }
+    .main {
+      width: 100% !important;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 2.5rem;
+    }
+    .sidebar { display: none !important; }
+
+
+    /* THEME TOGGLE CLICK FIX */
+    .theme-toggle,
+    .theme-toggle-spec,
+    #theme-toggle,
+    #theme-toggle-spec {
+      position: relative;
+      z-index: 50;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+    .site-header {
+      z-index: 100;
+    }
+    .nav-right .theme-toggle {
+      width: 44px;
+      height: 44px;
+    }
 </style>
 
   
+  <link rel="stylesheet" href="style.css?v=nav3">
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-logo">
-        <i class="fa-solid fa-laptop-code"></i>
-        <span>Portafolio<b>Virtual</b></span>
+<!-- NAVBAR -->
+  <header class="site-header" id="navbar" role="banner">
+    <nav class="nav-bar" aria-label="Navegación principal">
+      <div class="nav-left">
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-panel">
+          <span class="menu-toggle-bar"></span>
+          <span class="menu-toggle-bar"></span>
+          <span class="menu-toggle-bar"></span>
+        </button>
+        <a href="index.html" class="brand" aria-label="Portafolio Virtual - Inicio">
+          <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+          <span class="brand-text">Portafolio<b>Virtual</b></span>
+        </a>
       </div>
-      <ul class="nav-list">
-        <li><a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
-        <li><a href="index.html#especialidades"><i class="fa-solid fa-graduation-cap"></i> Especialidades</a></li>
-        <li><a href="index.html#proyectos"><i class="fa-solid fa-folder-open"></i> Proyectos</a></li>
-        <li><a href="index.html#comentarios"><i class="fa-solid fa-comments"></i> Comentarios</a></li>
-        <li><a href="index.html#contacto"><i class="fa-solid fa-envelope"></i> Contacto</a></li>
-        <li><a href="#" class="active"><i class="fa-solid fa-code"></i> Programación</a></li>
-        <li><a href="electricidad.html"><i class="fa-solid fa-bolt"></i> Electricidad</a></li>
-        <li><a href="contabilidad.html"><i class="fa-solid fa-calculator"></i> Contabilidad</a></li>
-        <li><a href="administracion.html"><i class="fa-solid fa-briefcase"></i> Administración</a></li>
-        <li><a href="construcciones-metalicas.html"><i class="fa-solid fa-industry"></i> Constr. Metálicas</a></li>
-        <li><a href="atencion-parvulos.html"><i class="fa-solid fa-child"></i> Atención de Párvulos</a></li>
-        <li><a href="agropecuaria.html"><i class="fa-solid fa-wheat-awn"></i> Agropecuaria</a></li>
-        <li><a href="gastronomia.html"><i class="fa-solid fa-utensils"></i> Gastronomía</a></li>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html#inicio" class="nav-link">Inicio</a></li>
+        <li><a href="index.html#especialidades" class="nav-link active">Especialidades</a></li>
+        <li><a href="index.html#proyectos" class="nav-link">Proyectos</a></li>
+        <li><a href="index.html#comentarios" class="nav-link">Comentarios</a></li>
+        <li><a href="index.html#creditos" class="nav-link">Créditos</a></li>
+        <li><a href="index.html#contacto" class="nav-link">Contacto</a></li>
       </ul>
-      <div class="sidebar-footer">
-        Liceo Bicentenario<br>Manuel Montt · San Javier
+      <div class="nav-right">
+        <button type="button" class="theme-toggle" id="theme-toggle" type="button" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        </button>
+        <a href="index.html#proyectos" class="btn-primary btn-explore">
+          <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+          <span class="btn-explore-label">Explorar</span>
+        </a>
       </div>
-    </aside>
+    </nav>
+  </header>
 
-    <main class="main">
+  <div class="menu-backdrop" id="menu-backdrop" hidden></div>
+  <aside class="menu-panel" id="menu-panel" aria-hidden="true" aria-label="Menú del sitio">
+    <div class="menu-panel-top">
+      <a href="index.html" class="brand menu-brand">
+        <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+        <span class="brand-text">Portafolio<b>Virtual</b></span>
+      </a>
+      <button type="button" class="menu-close" id="menu-close" aria-label="Cerrar menú">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <nav class="menu-panel-nav">
+      <p class="menu-section">Navegación</p>
+      <a href="index.html#inicio" class="menu-item"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+      <a href="index.html#especialidades" class="menu-item"><i class="fa-solid fa-graduation-cap"></i><span>Especialidades</span></a>
+      <a href="index.html#proyectos" class="menu-item"><i class="fa-solid fa-folder-open"></i><span>Proyectos</span></a>
+      <a href="index.html#comentarios" class="menu-item"><i class="fa-solid fa-comments"></i><span>Comentarios</span></a>
+      <a href="index.html#creditos" class="menu-item"><i class="fa-solid fa-award"></i><span>Créditos</span></a>
+      <a href="index.html#contacto" class="menu-item"><i class="fa-solid fa-envelope"></i><span>Contacto</span></a>
+      <p class="menu-section">Especialidades</p>
+      <a href="programacion.html" class="menu-item"><i class="fa-solid fa-code"></i><span>Programación</span></a>
+      <a href="electricidad.html" class="menu-item"><i class="fa-solid fa-bolt"></i><span>Electricidad</span></a>
+      <a href="contabilidad.html" class="menu-item"><i class="fa-solid fa-calculator"></i><span>Contabilidad</span></a>
+      <a href="administracion.html" class="menu-item"><i class="fa-solid fa-briefcase"></i><span>Administración</span></a>
+      <a href="construcciones-metalicas.html" class="menu-item"><i class="fa-solid fa-industry"></i><span>Constr. Metálicas</span></a>
+      <a href="atencion-parvulos.html" class="menu-item"><i class="fa-solid fa-child"></i><span>Atención de Párvulos</span></a>
+      <a href="agropecuaria.html" class="menu-item"><i class="fa-solid fa-wheat-awn"></i><span>Agropecuaria</span></a>
+      <a href="gastronomia.html" class="menu-item"><i class="fa-solid fa-utensils"></i><span>Gastronomía</span></a>
+    </nav>
+    <div class="menu-panel-foot">
+      Liceo Bicentenario Manuel Montt<br>San Javier · Maule
+    </div>
+  </aside>
+
+<div class="app">
+        <main class="main">
       <div class="topbar">
       <button type="button" class="theme-toggle-spec" id="theme-toggle-spec" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro" style="width:40px;height:40px;min-width:40px;min-height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface,#121A2B);color:var(--text,#F1F5F9);display:inline-grid;place-items:center;cursor:pointer;padding:0;overflow:hidden;line-height:1;flex-shrink:0;"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
 
@@ -513,7 +646,7 @@
             <div class="jefe-row">
               <div class="jefe-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
               <div>
-                <h3>Claudio Fabian Wilson Valenzuela</h3>
+                <h3>German Villar Martínez</h3>
                 <p>Jefe de Carrera · Programación</p>
               </div>
             </div>
@@ -581,55 +714,6 @@
     <i class="fa-solid fa-bars"></i>
   </button>
 
-  <script>
-    const sidebar = document.getElementById('sidebar');
-    const toggle = document.getElementById('menuToggle');
-    toggle.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      const icon = toggle.querySelector('i');
-      icon.className = sidebar.classList.contains('open')
-        ? 'fa-solid fa-xmark'
-        : 'fa-solid fa-bars';
-    });
-    document.querySelectorAll('.nav-list a').forEach(a => {
-      a.addEventListener('click', () => {
-        if (window.innerWidth <= 900) {
-          sidebar.classList.remove('open');
-          toggle.querySelector('i').className = 'fa-solid fa-bars';
-        }
-      });
-    });
-  </script>
-
-  <script>
-    (function () {
-      var KEY = "lm_theme";
-      var html = document.documentElement;
-      function iconFor(theme) {
-        // En modo día = sol; en modo noche = luna
-        return theme === "light"
-          ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
-          : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
-      }
-      function apply(theme) {
-        html.setAttribute("data-theme", theme);
-        localStorage.setItem(KEY, theme);
-        var btn = document.getElementById("theme-toggle-spec");
-        if (btn) btn.innerHTML = iconFor(theme);
-      }
-      document.addEventListener("DOMContentLoaded", function () {
-        var current = html.getAttribute("data-theme") || "dark";
-        apply(current);
-        var btn = document.getElementById("theme-toggle-spec");
-        if (btn) {
-          btn.addEventListener("click", function () {
-            var next = (html.getAttribute("data-theme") === "dark") ? "light" : "dark";
-            apply(next);
-          });
-        }
-      });
-    })();
-  </script>
-
+  <script src="script.js?v=theme2"></script>
 </body>
 </html>
