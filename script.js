@@ -73,7 +73,7 @@ const JARVIE_KB = {
   },
   sueldos: "Rango **referencial** de sueldos de profesores: entre **$800.000 y $1.300.000** CLP. No es un monto fijo: varía por experiencia, horas, asignaciones y funciones.",
   directivos: "**Equipo directivo y de gestión — Liceo Bicentenario Manuel Montt:**\n\n• **Aquiles Vásquez** — Director LMM\n• **Eduardo Molina** — Subdirector\n• **Augusto Astudillo** — Inspector General\n• **Bessy Rodríguez** — Inspectoría General\n• **José Pinto** — Inspectoría General\n• **Francisco Quiroz** — Inspectoría General\n• **Fernanda Bravo** — Jefa U.T.P. (Unidad Técnico Pedagógica)\n• **Sandra Andaur** — Jefa U.T.P.\n• **Gregorio Sepúlveda** — Coordinador Téc. Profesional\n• **Hans Saavedra** — Coordinador Área Industrial (también jefe de carrera de **Electricidad**)\n• **Luis González** — Departamento Orientación\n• **Ricardo Ríos** — Convivencia Escolar\n• **Soledad López** — Jefa Psicosocial LMM\n• **María Inés Sepúlveda** — Evaluadora",
-  jefesLista: "**Jefes de carrera (no son profesor jefe ni director):**\n\n• **Programación:** German Villar Martinez\n• **Electricidad:** Hans Saavedra\n• **Contabilidad:** Delia Sepúlveda\n• **Administración (RRHH):** Patricia Fuentes Meriño\n• **Construcciones Metálicas:** Elvis Luna\n• **Atención de Párvulos:** María Alejandra Inostroza\n• **Agropecuaria:** Sandra Norambuena\n• **Gastronomía (Cocina):** Karina Soto",
+  jefesLista: "**Jefes de carrera (no son profesor jefe ni director):**\n\n• **Programación:** German Villar Martínez\n• **Electricidad:** Hans Saavedra\n• **Contabilidad:** Delia Sepúlveda\n• **Administración (RRHH):** Patricia Fuentes Meriño\n• **Construcciones Metálicas:** Elvis Luna\n• **Atención de Párvulos:** María Alejandra Inostroza\n• **Agropecuaria:** Sandra Norambuena\n• **Gastronomía (Cocina):** Karina Soto",
   rice: "**RICE (resumen):**\n\n• **Sellos:** Respeto, Responsabilidad y Tolerancia.\n• **Jornada:** lunes a viernes desde **08:15**, carga ~**42 horas**.\n• **Uniforme** obligatorio; en talleres TP vestimenta técnica.\n• Convivencia **formativa** (diálogo, mediación).\n• **Conducto regular:** Profesor Jefe/Asignatura → UTP / Convivencia / Inspectoría → Dirección.\n• Protocolos: atrasos, bullying, accidentes, Aula Segura (Ley 21.128), etc.\n\nAnte un caso concreto, acude a la autoridad correspondiente.",
   historia: "El **Liceo Bicentenario Manuel Montt** de San Javier (**RBD 3479**) es un liceo público del Maule (HC y TP). Se fundó hacia mediados de los **1940**. En **octubre 2023** recibió el sello **Liceo Bicentenario de Excelencia**. Director actual: **Aquiles Mauricio Vásquez Castillo**.",
   logros: "Logros: sello **Liceo Bicentenario de Excelencia (2023)**; avances en **SIMCE**; articulación para continuidad de estudios; reconocimiento comunal de San Javier.",
@@ -89,7 +89,7 @@ const JARVIE_SYSTEM = `Eres JARVIE, asistente virtual del Portafolio del Liceo B
 Sabes que eres un bot; humor ocasional, nunca cruel. Prioriza datos correctos. Español de Chile, breve. Usa **negritas**.
 NO inventes. Notas: https://calificando.cl/ | Justificar: https://justificar.lmmsys.cl/
 Sueldos docentes referencial: $800.000-$1.300.000.
-Jefes: Programación German Villar Martinez; Electricidad Hans Saavedra; Contabilidad Delia Sepúlveda; Administración Patricia Fuentes Meriño; Construcciones Metálicas Elvis Luna; Párvulos María Alejandra Inostroza; Agropecuaria Sandra Norambuena; Gastronomía Karina Soto.
+Jefes: Programación German Villar Martínez; Electricidad Hans Saavedra; Contabilidad Delia Sepúlveda; Administración Patricia Fuentes Meriño; Construcciones Metálicas Elvis Luna; Párvulos María Alejandra Inostroza; Agropecuaria Sandra Norambuena; Gastronomía Karina Soto.
 RICE: sellos Respeto/Responsabilidad/Tolerancia; jornada 08:15; conducto Profesor→UTP/Convivencia/Inspectoría→Dirección.
 Historia: ~1940; Bicentenario Excelencia 2023; director Aquiles Vásquez. Equipo: Subdirector Eduardo Molina; Inspectoría (Astudillo, Rodríguez, Pinto, Quiroz); UTP Fernanda Bravo y Sandra Andaur; Coord. TP Gregorio Sepúlveda; Coord. Industrial / jefe Electricidad Hans Saavedra; Orientación Luis González; Convivencia Ricardo Ríos; Psicosocial Soledad López; Evaluadora María Inés Sepúlveda.
 Destacados: Aaron Cancino y Cristóbal Soto (Eco-Red, 1er lugar).`;
@@ -727,7 +727,7 @@ function normalizeText(text) {
 
 function matchJefeCarrera(q) {
     const pairs = [
-        [/programac/, "Programación", "German Villar Martinez"],
+        [/programac/, "Programación", "German Villar Martínez"],
         [/electric/, "Electricidad", "Hans Saavedra"],
         [/contabil/, "Contabilidad", "Delia Sepúlveda"],
         [/administr|rrhh|recursos humanos/, "Administración (RRHH)", "Patricia Fuentes Meriño"],
@@ -770,7 +770,7 @@ function getJarvieReplyLocal(text) {
         if (uno) return uno;
         return JARVIE_KB.jefesLista;
     }
-    if (/german villar|villar martinez/.test(q)) return "**German Villar Martinez** es jefe de carrera de **Programación**.";
+    if (/german villar|villar martinez/.test(q)) return "**German Villar Martínez** es jefe de carrera de **Programación**.";
     if (/hans saavedra/.test(q)) return "**Hans Saavedra** es **jefe de carrera de Electricidad** y también **Coordinador del Área Industrial** del liceo.";
     if (/aquiles|vasquez|vásquez/.test(q) && /director|quien/.test(q) || /^quien es el director|director del liceo|director lmm/.test(q))
         return "**Aquiles Vásquez** es el **Director** del Liceo Bicentenario Manuel Montt (LMM).";
@@ -810,7 +810,7 @@ function getJarvieReplyLocal(text) {
         return JARVIE_KB.especialidades + " Escribe el nombre de una o ve a **Especialidades** → Ver más.";
     }
     if (/programac|software|python|javascript|informatica/.test(q)) {
-        return "**Programación** (jefe: **German Villar Martinez**): software, web, bases de datos y soporte. Página **Programación**.";
+        return "**Programación** (jefe: **German Villar Martínez**): software, web, bases de datos y soporte. Página **Programación**.";
     }
     if (/electric|tablero|fotovolta|plc/.test(q)) {
         return "**Electricidad** (jefe: **Hans Saavedra**): instalaciones, mantenimiento y renovables. Página **Electricidad**.";
